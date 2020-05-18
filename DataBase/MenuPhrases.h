@@ -13,24 +13,34 @@ public:
 	virtual string LoadDB() { NaN; }
 	virtual string LengSet() { NaN; }
 	virtual string Exit() { NaN; }
+	virtual string LangSet_header() { NaN; }
+	virtual string Lang_eng() { NaN; }
+	virtual string Lang_rus() { NaN; }
 };
 
 class rus: public phrases{
 public:
 	string MainMenu_header() { return "Главное меню"; }
-	string MainMenu_footer() { return "Для перемещения используйте стрелки*"; }
+	string MainMenu_footer() { return "Для перемещения используйте стрелки\n'Enter', чтобы выбрать"; }
 	string CreateDB() { return "Создать базу данных"; }
 	string LoadDB() { return "Загрузить базу данных"; }
 	string LengSet() { return "Выбрать язык"; }
 	string Exit() { return "Выход"; }
+
+	string Lang_eng() { return "Английский"; }
+	string Lang_rus() { return "Русский"; }
+
 };
 
 class eng: public phrases {
 public:
 	string MainMenu_header() { return "Main menu"; }
-	string MainMenu_footer() { return "Use arrows to move*"; }
+	string MainMenu_footer() { return "Use arrows to move\n'Enter' to choose*"; }
 	string CreateDB() { return "Create a data base"; }
 	string LoadDB() { return "Load a data base"; }
 	string LengSet() { return "Select language"; }
 	string Exit() { return "Exit"; }
+
+	string Lang_eng() { return  "English"; }
+	string Lang_rus() { return  "Russian"; }
 };

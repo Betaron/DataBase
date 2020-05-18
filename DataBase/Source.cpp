@@ -12,15 +12,28 @@ int main() {
 	SetConsoleOutputCP(1251);
 
 	phrases* Sp;
-	Sp = new eng;
-
-	//cout << Sp->MainMenu_header() << endl;
-	//Sp = new rus;
-	//cout << Sp->MainMenu_header() << endl;
+	Sp = new rus;
 
 	Menu* Builder = new Menu;
-	
-	Builder->MenuCreate(3, Sp->CreateDB(), Sp->LoadDB(), Sp->LengSet());
+	while (44) {
+		switch (Builder->MenuCreate(Sp->MainMenu_header(), Sp->MainMenu_footer(),
+			4, Sp->CreateDB(), Sp->LoadDB(), Sp->LengSet(), Sp->Exit()))
+		{
+		case 2:
+			switch (Builder->MenuCreate(Sp->LengSet(), "",
+				2, Sp->Lang_rus(), Sp->Lang_eng()))
+			{
+			case 0: Sp = new rus; break;
+			case 1: Sp = new eng; break;
+			default: break;
+			}
+			break;
+		case 3:
+			return 0;
+		default:
+			break;
+		}
+	}
 
 	return 0;
 }

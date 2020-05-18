@@ -10,22 +10,20 @@ using namespace std;
 #define ENTER 13
 
 class Menu {
-
 private:
-	uint16_t cursor;
 public:
-	Menu() {
-		cursor = 0;
-	}
-	int MenuCreate(size_t len, string m ...) {
-		cursor = 0;
+	int MenuCreate(string header, string footer, size_t len, string m ...) {
+		uint16_t cursor(0);
 		string* ptr = &m;
 		do {
 			system("cls");
+			cout << header << endl << endl;
 			for (uint16_t i = 0; i < len; i++) {
 				if (i == cursor) cout << " > ";
 				cout << *(ptr+i) << endl;
 			}
+			cout << endl << footer << endl;
+
 			switch (_getch())
 			{
 			case UP:
@@ -41,4 +39,5 @@ public:
 			}
 		} while (1);
 	}
+
 };
