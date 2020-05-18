@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <conio.h>
-#include <Windows.h>
 
 using namespace std;
 
@@ -12,15 +11,16 @@ using namespace std;
 class Menu {
 private:
 public:
-	int MenuCreate(string header, string footer, size_t len, string m ...) {
+	int MenuCreate(const char* header, const char* footer, size_t len, const char* m ...) {
 		uint16_t cursor(0);
-		string* ptr = &m;
+		const char** ptr = &m;
 		do {
 			system("cls");
 			cout << header << endl << endl;
 			for (uint16_t i = 0; i < len; i++) {
 				if (i == cursor) cout << " > ";
 				cout << *(ptr+i) << endl;
+				
 			}
 			cout << endl << footer << endl;
 
