@@ -9,18 +9,18 @@ using namespace std;
 #define ENTER 13
 
 class Menu {
-private:
+
 public:
-	int MenuCreate(const char* header, const char* footer, size_t len, const char* m ...) {
-		uint16_t cursor(0);
+	int MenuCreate(const char* header, const char* footer, int len, const char* m ...) {
+		int cursor(0);
+		uint8_t f = 1;
 		const char** ptr = &m;
 		do {
 			system("cls");
 			cout << header << endl << endl;
 			for (uint16_t i = 0; i < len; i++) {
 				if (i == cursor) cout << " > ";
-				cout << *(ptr+i) << endl;
-				
+				cout << *(ptr + i) << endl;
 			}
 			cout << endl << footer << endl;
 

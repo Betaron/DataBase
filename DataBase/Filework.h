@@ -2,17 +2,16 @@
 
 #include <iostream>
 #include "MenuPhrases.h"
+#include <string>
+#include <fstream>
 
 class Filework
 {
 private:
-	phrases* Speaker;
 	string DB_name;
+	fstream DB;
 public:
-	Filework(phrases* p) {
-		Speaker = p;
-	}
-	int DB_open();
-	int DB_create();
+	int DB_open(phrases*);
+	int DB_create(phrases*);
 };
 
