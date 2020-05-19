@@ -33,6 +33,16 @@ int Filework::DB_open(phrases* Sp) {
 				DB.close();
 			}
 		}
+		size_t PointPos = DB_name.length();
+		int32_t SlashPos = -1;
+		for (uint32_t i = 0; i < DB_name.length(); i++) {
+			if (DB_name[i] == '.') PointPos = i;
+			if (DB_name[i] == '\\') SlashPos = i;
+		}
+		for (int32_t i = SlashPos + 1; i < PointPos; i++) {
+			DB_short_name += DB_name[i];
+		}
+		DB_menu(Sp);
 	return 0;
 }
 
@@ -58,17 +68,34 @@ int Filework::DB_create(phrases* Sp) {
 			DB.open(DB_name + ".sdb", ios::in | ios::out | ios::binary);
 			cout << Sp->Fope() << endl;
 		}
-		size_t PointPos = DB_name.length();
-		int32_t SlashPos = -1;
-		for (uint32_t i = 0; i < DB_name.length(); i++) {
-			if (DB_name[i] == '.') PointPos = i;
-			if (DB_name[i] == '\\') SlashPos = i;
+	}
+	size_t PointPos = DB_name.length();
+	int32_t SlashPos = -1;
+	for (uint32_t i = 0; i < DB_name.length(); i++) {
+		if (DB_name[i] == '.') PointPos = i;
+		if (DB_name[i] == '\\') SlashPos = i;
+	}
+	DB << (char)0x05 << (char)0x73;
+	for (int32_t i = SlashPos + 1; i < PointPos; i++) {
+		DB_short_name += DB_name[i];
+		DB << DB_name[i];
+	}
+	DB.exceptions(ifstream::goodbit);
+	DB_menu(Sp);
+	return 0;
+}
+
+int Filework::DB_menu(phrases* Sp) {
+	while (44) {
+		switch (Builder->MenuCreate(Sp->DBmenu_header(DB_short_name), Sp->DBmenu_footer(),
+			4, Sp->ShowDB(), Sp->AddEntry(), Sp->Task44(), Sp->GoMM()))
+		{
+		case 3:
+			DB.close();
+			return 0;
+		default:
+			break;
 		}
-		DB << (char)0x05 << (char)0x73;
-		for (int32_t i = SlashPos + 1; i < PointPos; i++) {
-			DB << DB_name[i];
-		}
-		DB.exceptions(ifstream::goodbit);
 	}
 	return 0;
 }

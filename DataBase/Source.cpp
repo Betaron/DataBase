@@ -3,6 +3,7 @@
 #include "MenuPhrases.h"
 #include "menu.h"
 #include "Filework.h"
+#include "Student.h"
 
 using namespace	std;
 
@@ -34,6 +35,7 @@ int main() {
 			}
 			break;
 		case 3:
+			delete Builder;
 			delete Sp;
 			return 0;
 		default:
