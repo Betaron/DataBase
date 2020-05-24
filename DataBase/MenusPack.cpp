@@ -45,6 +45,7 @@ int MenusPack::DatabaseMenu() {
 			5, Sp->ShowDB(), Sp->AddEntry(), Sp->EditEntry(), Sp->Task44(), Sp->GoMM()))
 		{
 		case 0:
+			ShowDB();
 			break;
 		case 1:
 			StudentMenu(StudentsCreator.item_add());
@@ -79,9 +80,9 @@ int MenusPack::StudentMenu(Student*) {
 	string str;
 	while (44) {
 		switch (Builder->MenuCreate(Sp->Student_header(Libr.GetDB_short_name(),
-			CurrentStudent->GetName(), CurrentStudent->GetSurname(), CurrentStudent->GetNumGB()),Sp->Student_footer(),
+			CurrentStudent->GetName(), CurrentStudent->GetSurname(), CurrentStudent->GetNumGB()),Sp->Student_footer(CurrentStudent->GetDone()),
 			13, Sp->Surname(), Sp->Name(), Sp->MidName(), Sp->Gender(), Sp->Birth(),
-			Sp->UniYear(), Sp->Faculty(), Sp->Departament(), Sp->Group(), Sp->GrBookNum(),
+			Sp->UniYear(), Sp->Faculty(), Sp->Department(), Sp->Group(), Sp->GrBookNum(),
 			Sp->GoEnterGr(),Sp->DEL_stud(), Sp->GoDBmenu()))
 		{
 		case 0:while (!(CurrentStudent->SetSurname(Sp))) {} break;
@@ -115,7 +116,7 @@ int MenusPack::StudentMenu(Student*) {
 			if (CurrentStudent->GetName() == "-" ||
 				CurrentStudent->GetSurname() == "-" ||
 				CurrentStudent->GetGender() == -1 ||
-				CurrentStudent->GetBirth() == DefaultDate ||
+				CurrentStudent->GetBirth() == DEFAULT_DATE ||
 				CurrentStudent->GetUniversityYear() == 0 ||
 				CurrentStudent->GetFaculty() == "-" ||
 				CurrentStudent->GetDepartment() == "-" ||
@@ -157,5 +158,46 @@ int MenusPack::EnterGB_Screen() {
 }
 
 int MenusPack::ShowDB() {
+	if (!StudentsCreator.getListStatus()) {
+		cout << Sp->EmptyDB() << endl << endl;
+		system("pause");
+		return 2;
+	}
+	system("cls");
+	string gender;
+	char B = (char)-107;
+	int Number = 1;
+	StudentsCreator.Set_to_start();
+	cout << setw(145) << setfill(B) << B << endl;
+	//cout << B << setw(20) << left << "#" <<
+	//	B << setw(20) << left << Sp->Surname() <<
+	//	B << setw(20) << left << Sp->Name() <<
+	//	B << setw(20) << left << Sp->MidName() <<
+	//	B << setw(10) << left << Sp->GrBookNum() <<
+	//	B << setw(15) << left << Sp->Group() <<
+	//	B << setw(10) << left << Sp->Gender() <<
+	//	B << setw(15) << left << Sp->Birth() <<
+	//	B << setw(20) << left << Sp->UniYear() <<
+	//	B << setw(10) << left << Sp->Faculty() <<
+	//	B << setw(10) << left << Sp->Department() << B << endl;
+
+	do {
+		if (CurrentStudent->GetGender() == 0) gender = Sp->GenderFem();
+		else gender = Sp->GenderMan();
+		cout << setfill(' ') << '|' << setw(4) << left << Number <<
+			'|' << setw(20) << left << CurrentStudent->GetSurname() <<
+			'|' << setw(20) << left << CurrentStudent->GetName() <<
+			'|' << setw(20) << left << CurrentStudent->GetMiddleName() <<
+			'|' << setw(10) << left << CurrentStudent->GetNumGB() <<
+			'|' << setw(15) << left << CurrentStudent->GetGroup() <<
+			'|' << setw(10) << left << gender <<
+			'|' << setw(10) << left << CurrentStudent->GetBirth() <<
+			'|' << setw(4) << left << CurrentStudent->GetUniversityYear() <<
+			'|' << setw(10) << left << CurrentStudent->GetFaculty() <<
+			'|' << setw(10) << left << CurrentStudent->GetDepartment() << '|' << endl;
+		cout << setw(145) << setfill(B) << B << endl;
+		StudentsCreator.moveCursor(1);
+	} while (StudentsCreator.GetItem() != StudentsCreator.GetHead()->next_item);
+	system("pause");
 	return 0;
 }

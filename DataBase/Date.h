@@ -18,4 +18,4 @@ public:
 	int GetDay();
 	int GetMonth();
 	int GetYear();
-};
+} const DEFAULT_DATE;

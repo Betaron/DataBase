@@ -15,16 +15,16 @@ public:
 class Student : setter
 {
 private:
-	char Name[20] = "";
-	char Surname[20] = "";
-	char MiddleName[20] = "";
+	char Name[21] = "";
+	char Surname[21] = "";
+	char MiddleName[21] = "";
 	int16_t Gender;
 	Date Birth;
 	int16_t* UniversityYear;
-	char Faculty[10] = "";
-	char Department[10] = "";
-	char Group[15] = "";
-	char NumGB[10] = ""; //number of grade book
+	char Faculty[11] = "";
+	char Department[11] = "";
+	char Group[16] = "";
+	char NumGB[11] = ""; //number of grade book
 public:
 	Student() {
 		*Name = '-';

@@ -9,8 +9,10 @@ using namespace	std;
 class phrases {
 protected:
 	string str;
+	string _str;
 public:
 	phrases() {
+		system("mode con cols=145 lines=25");
 		SetConsoleCP(1251);
 		SetConsoleOutputCP(1251);
 	}
@@ -46,13 +48,13 @@ public:
 	virtual const char* Birth() { NaN; }
 	virtual const char* UniYear() { NaN; }
 	virtual const char* Faculty() { NaN; }
-	virtual const char* Departament() { NaN; }
+	virtual const char* Department() { NaN; }
 	virtual const char* Group() { NaN; }
 	virtual const char* GrBookNum() { NaN; }
 	virtual const char* GoEnterGr() { NaN; }
 	virtual const char* DEL_stud() { NaN; }
 	virtual const char* GoDBmenu() { NaN; }
-	virtual const char* Student_footer() { NaN; }
+	virtual const char* Student_footer(int) { NaN; }
 
 	virtual const char* EnterErr() { NaN; }
 	virtual const char* EmptyErr() { NaN; }
@@ -111,14 +113,18 @@ public:
 	const char* Birth() { return "Дата рождения"; }
 	const char* UniYear() { return "Год поступления"; }
 	const char* Faculty() { return "Факультет"; }
-	const char* Departament() { return "Кафедра"; }
+	const char* Department() { return "Кафедра"; }
 	const char* Group() { return "Группа"; }
 	const char* GrBookNum() { return "Номер зачётной книжки"; }
 	const char* GoEnterGr() { return "Перейти к вводу оценок"; }
 	const char* DEL_stud() { return "Удалить студента"; }
 	const char* GoDBmenu() { return "Вернуться к меню базы данных"; }
-	const char* Student_footer() { return "Если не заполнить все поля персональных данных,\nто при выходе в меню базы данных судент автоматичекси удалится.."
-		"\n\nПрежде чем заполнять год поступления, необходимо указать дату рождения**"; }
+	const char* Student_footer(int Done) { 
+		this->_str = to_string(Done) + "/9 полей заполнено\n" +
+		"Если не заполнить все поля персональных данных,\nто при выходе в меню базы данных судент автоматичекси удалится.." +
+		"\n\nПрежде чем заполнять год поступления, необходимо указать дату рождения**";
+		return this->_str.c_str();
+	}
 
 	const char* EnterErr() { return "Присутствуют недопустимые символы"; }
 	const char* EmptyErr() { return "Вы ничего не ввели. Попробуйте снова"; }
@@ -177,14 +183,18 @@ public:
 	const char* Birth() { return "Date of birth"; }
 	const char* UniYear() { return "Year of admission"; }
 	const char* Faculty() { return "Faculty"; }
-	const char* Departament() { return "Departament"; }
+	const char* Department() { return "Departament"; }
 	const char* Group() { return "Group"; }
 	const char* GrBookNum() { return "Gradebook number"; }
 	const char* GoEnterGr() { return "Go to enter grades"; }
 	const char* DEL_stud() { return "Delete student"; }
 	const char* GoDBmenu() { return "Go to database menu"; }
-	const char* Student_footer() { return "If you don't fill in all the fields of personal data,\nwhen you exit the data base menu sudent will automatically be deleted.."
-		"\n\nBefore filling in the year of receipt, you must specify the date of birth **"; }
+	const char* Student_footer(int Done) { 
+		this->_str = to_string(Done) + "/9 fields filled\n" +
+		"If you don't fill in all the fields of personal data,\nwhen you exit the data base menu sudent will automatically be deleted.." +
+		"\n\nBefore filling in the year of receipt, you must specify the date of birth **"; 
+		return this->_str.c_str();
+	}
 
 	const char* EnterErr() { return "Invalid characters present"; }
 	const char* EmptyErr() { return "You have not entered anything. Try again"; }

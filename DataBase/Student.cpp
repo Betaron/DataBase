@@ -39,7 +39,7 @@ int setter::SetWordField(char* field, size_t fieldLen, const char* header , phra
 			if (i == len - 1) flag = 0;
 		}
 	}
-	strcpy_s(field, fieldLen, BufStr.c_str());
+	strcpy_s(field, fieldLen+1, BufStr.c_str());
 	return 1;
 }
 
@@ -114,11 +114,11 @@ int Student::SetName(phrases* Sp) { return SetWordField(Name, 20, Sp->Name(), Sp
 int Student::SetSurname(phrases* Sp) { return SetWordField(Surname, 20, Sp->Surname(), Sp); }
 int Student::SetMiddleName(phrases* Sp) { return SetWordField(MiddleName, 20, Sp->MidName(), Sp); }
 int Student::SetFaculty(phrases* Sp) { return SetWordField(Faculty, 10, Sp->Faculty(), Sp); }
-int Student::SetDepartment(phrases* Sp) { return SetWordField(Department, 10, Sp->Departament(), Sp); }
+int Student::SetDepartment(phrases* Sp) { return SetWordField(Department, 10, Sp->Department(), Sp); }
 int Student::SetGroup(phrases* Sp) { return SetWordField(Group, 15, Sp->Group(), Sp); }
 
 string Student::SetNumGB(phrases* Sp) {
-	char source[10] = "";
+	char source[11] = "";
 	string res;
 	if (SetWordField(source, 10, "", Sp) == 2) res = "!Q";
 	 else res = source;
@@ -142,5 +142,15 @@ const char* Student::GetGroup(){ return Group; }
 char* Student::GetNumGB(){ return NumGB; }
 
 int Student::GetDone() {
-	return 0;
+	int Done(0);
+	if (strcmp(Name, "-")) Done++;
+	if (strcmp(Surname, "-")) Done++;
+	if (Gender != -1) Done++;
+	if (Birth != DEFAULT_DATE) Done++;
+	if (*UniversityYear != 0) Done++;
+	if (strcmp(Faculty, "-")) Done++;
+	if (strcmp(Department, "-")) Done++;
+	if (strcmp(Group, "-")) Done++;
+	if (strcmp(NumGB, "-")) Done++;
+	return Done;
 }

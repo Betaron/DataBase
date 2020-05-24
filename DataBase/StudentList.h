@@ -43,4 +43,5 @@ public:
 
 	list* GetHead() { return Item_Head; }
 	list* GetItem() { return Item_Current; }
+	void Set_to_start() { Item_Current = Item_Head->next_item; }
 };
