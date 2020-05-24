@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -140,16 +140,19 @@
   <ItemGroup>
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Filework.cpp" />
+    <ClCompile Include="MenusPack.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Student.cpp" />
+    <ClCompile Include="StudentList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Date.h" />
     <ClInclude Include="Filework.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="MenuPhrases.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="GUIphrases.h" />
+    <ClInclude Include="MenusPack.h" />
     <ClInclude Include="Student.h" />
+    <ClInclude Include="StudentList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

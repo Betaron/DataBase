@@ -9,7 +9,6 @@ using namespace std;
 #define ENTER 13
 
 class Menu {
-
 public:
 	int MenuCreate(const char* header, const char* footer, int len, const char* m ...) {
 		int cursor(0);
@@ -20,7 +19,7 @@ public:
 			cout << header << endl << endl;
 			for (uint16_t i = 0; i < len; i++) {
 				if (i == cursor) cout << " > ";
-				cout << *(ptr + i) << endl;
+				cout << ptr[i] << endl;
 			}
 			cout << endl << footer << endl;
 
@@ -33,11 +32,11 @@ public:
 				if (cursor > 0) cursor--;
 				break;
 			case ENTER:
+				system("cls");
 				return cursor;
 			default:
 				break;
 			}
 		} while (1);
 	}
-
 };

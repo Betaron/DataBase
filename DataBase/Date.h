@@ -11,10 +11,11 @@ private:
 	uint16_t YYYY;
 public:
 	friend ostream& operator <<(ostream&, const Date&);
-	Date() {
-		DD = 0;
-		MM = 0;
-		YYYY = 0;
-	}
+	friend int operator !=(const Date&, const Date&);
+	friend int operator ==(const Date&, const Date&);
+	Date() :DD(0), MM(0), YYYY(0) {}
 	int SetDate(int, int, int);
+	int GetDay();
+	int GetMonth();
+	int GetYear();
 };

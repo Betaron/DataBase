@@ -1,12 +1,16 @@
-#include "Filework.h"
+ #include "Filework.h"
 
 int Filework::DB_open(phrases* Sp) {
 	uint16_t CheckPIN(0);
 		DB.exceptions(ifstream::badbit | ifstream::failbit);
-		system("cls");
 		cout << Sp->DBname_ivite() << endl;
 		while (!DB.is_open()) {
+			cout << " > ";
 			getline(cin, DB_name);
+			if (DB_name.empty()) {
+				cout << Sp->EmptyErr() << endl;
+				continue;
+			}
 			if (DB_name == "!Q") return 0;
 			try
 			{
@@ -42,8 +46,7 @@ int Filework::DB_open(phrases* Sp) {
 		for (int32_t i = SlashPos + 1; i < PointPos; i++) {
 			DB_short_name += DB_name[i];
 		}
-		DB_menu(Sp);
-	return 0;
+	return 1;
 }
 
 int Filework::DB_create(phrases* Sp) {
@@ -81,21 +84,5 @@ int Filework::DB_create(phrases* Sp) {
 		DB << DB_name[i];
 	}
 	DB.exceptions(ifstream::goodbit);
-	DB_menu(Sp);
-	return 0;
-}
-
-int Filework::DB_menu(phrases* Sp) {
-	while (44) {
-		switch (Builder->MenuCreate(Sp->DBmenu_header(DB_short_name), Sp->DBmenu_footer(),
-			4, Sp->ShowDB(), Sp->AddEntry(), Sp->Task44(), Sp->GoMM()))
-		{
-		case 3:
-			DB.close();
-			return 0;
-		default:
-			break;
-		}
-	}
-	return 0;
+	return 1;
 }
