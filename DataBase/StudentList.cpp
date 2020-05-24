@@ -69,14 +69,13 @@ uint8_t StudentList::getListStatus() { return Is_Created; }
 
 list* StudentList::FindGB(string source) {
 	list* start = Item_Current;
-	moveCursor(1);
-	while (Item_Current != start) {
+	do {
 		if (Item_Current->stud->GetNumGB() == source) {
 			list* coincidence = Item_Current;
 			Item_Current = start;
 			return coincidence;
 		}
 		moveCursor(1);
-	}
+	} while (Item_Current != start);
 	return nullptr;
 }

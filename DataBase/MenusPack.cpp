@@ -41,8 +41,8 @@ int MenusPack::LangMenu() {
 
 int MenusPack::DatabaseMenu() {
 	while (44) {
-		switch (Builder->MenuCreate(Sp->DBmenu_header(Libr.GetDB_short_name()), Sp->DBmenu_footer(),
-			4, Sp->ShowDB(), Sp->AddEntry(), Sp->Task44(), Sp->GoMM()))
+		switch (Builder->MenuCreate(Sp->DBmenu_header(Libr.GetDB_short_name()), "",
+			5, Sp->ShowDB(), Sp->AddEntry(), Sp->EditEntry(), Sp->Task44(), Sp->GoMM()))
 		{
 		case 0:
 			break;
@@ -50,8 +50,11 @@ int MenusPack::DatabaseMenu() {
 			StudentMenu(StudentsCreator.item_add());
 			break;
 		case 2:
+			EnterGB_Screen();
 			break;
 		case 3:
+			break;
+		case 4:
 			Libr.CloseDB();
 			return 0;
 		default:
@@ -72,26 +75,24 @@ int MenusPack::GenderMenu() {
 }
 
 int MenusPack::StudentMenu(Student*) {
-	int res;
 	Date DefaultDate;
 	string str;
 	while (44) {
 		switch (Builder->MenuCreate(Sp->Student_header(Libr.GetDB_short_name(),
-			CurrentStudent->GetName(), CurrentStudent->GetSurname(),
-			CurrentStudent->GetMiddleName(), CurrentStudent->GetNumGB()),Sp->Student_footer(),
+			CurrentStudent->GetName(), CurrentStudent->GetSurname(), CurrentStudent->GetNumGB()),Sp->Student_footer(),
 			13, Sp->Surname(), Sp->Name(), Sp->MidName(), Sp->Gender(), Sp->Birth(),
 			Sp->UniYear(), Sp->Faculty(), Sp->Departament(), Sp->Group(), Sp->GrBookNum(),
 			Sp->GoEnterGr(),Sp->DEL_stud(), Sp->GoDBmenu()))
 		{
-		case 0:while (!(res = CurrentStudent->SetSurname(Sp))) {} break;
-		case 1:while (!(res = CurrentStudent->SetName(Sp))) {} break;
-		case 2:while (!(res = CurrentStudent->SetMiddleName(Sp))) {} break;
+		case 0:while (!(CurrentStudent->SetSurname(Sp))) {} break;
+		case 1:while (!(CurrentStudent->SetName(Sp))) {} break;
+		case 2:while (!(CurrentStudent->SetMiddleName(Sp))) {} break;
 		case 3:StudentsCreator.GetItem()->stud->SetGender(GenderMenu()); break;
-		case 4:while (!(res = CurrentStudent->SetBirth(Sp))) {} break;
-		case 5:while (!(res = CurrentStudent->SetUniversityYear(Sp))) {} break;
-		case 6:while (!(res = CurrentStudent->SetFaculty(Sp))) {} break;
-		case 7:while (!(res = CurrentStudent->SetDepartment(Sp))) {} break;
-		case 8:while (!(res = CurrentStudent->SetGroup(Sp))) {} break;
+		case 4:while (!(CurrentStudent->SetBirth(Sp))) {} break;
+		case 5:while (!(CurrentStudent->SetUniversityYear(Sp))) {} break;
+		case 6:while (!(CurrentStudent->SetFaculty(Sp))) {} break;
+		case 7:while (!(CurrentStudent->SetDepartment(Sp))) {} break;
+		case 8:while (!(CurrentStudent->SetGroup(Sp))) {} break;
 		case 9:
 			cout << Sp->GrBookNum() << ": " << CurrentStudent->GetNumGB() << endl;
 			cout << Sp->Len() << 10;
@@ -113,13 +114,13 @@ int MenusPack::StudentMenu(Student*) {
 		case 12:
 			if (CurrentStudent->GetName() == "-" ||
 				CurrentStudent->GetSurname() == "-" ||
-				CurrentStudent->GetMiddleName() == "-" ||
 				CurrentStudent->GetGender() == -1 ||
 				CurrentStudent->GetBirth() == DefaultDate ||
 				CurrentStudent->GetUniversityYear() == 0 ||
 				CurrentStudent->GetFaculty() == "-" ||
 				CurrentStudent->GetDepartment() == "-" ||
-				CurrentStudent->GetGroup() == "-") {
+				CurrentStudent->GetGroup() == "-" ||
+				CurrentStudent->GetNumGB() == "-") {
 				StudentsCreator.item_delete();
 			}
 			return 0;
@@ -130,3 +131,31 @@ int MenusPack::StudentMenu(Student*) {
 	}
 }
 
+int MenusPack::EnterGB_Screen() {
+	if (!StudentsCreator.getListStatus()) {
+		cout << Sp->EmptyDB() << endl << endl;
+		system("pause");
+		return 2;
+	}
+	string str;
+	list* noname;
+	system("cls");
+	cout << Sp->EnterGBN() << endl;
+	cout << Sp->Len() << 10 << endl;
+	while (44) {
+		str = StudentsCreator.GetItem()->stud->SetNumGB(Sp);
+		if (str == "!Q") return 2;
+		noname = StudentsCreator.FindGB(str);
+		if (noname == nullptr) {
+			cout << Sp->NaNGBN() << endl;
+			continue;
+		}
+		else break;
+	}
+	StudentMenu(noname->stud);
+	return 1;
+}
+
+int MenusPack::ShowDB() {
+	return 0;
+}

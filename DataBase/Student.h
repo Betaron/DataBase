@@ -60,4 +60,5 @@ public:
 	const char* GetDepartment();
 	const char* GetGroup();
 	char* GetNumGB();
+	int GetDone();
 };

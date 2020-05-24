@@ -24,4 +24,6 @@ public:
 	int DatabaseMenu();
 	int StudentMenu(Student*);
 	int GenderMenu();
+	int EnterGB_Screen();
+	int ShowDB();
 };

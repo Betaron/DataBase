@@ -34,10 +34,10 @@ public:
 	virtual const char* DBmenu_header(string) { NaN; }
 	virtual const char* ShowDB() { NaN; }
 	virtual const char* AddEntry() { NaN; }
+	virtual const char* EditEntry() { NaN; }
 	virtual const char* Task44() { NaN; }
-	virtual const char* DBmenu_footer() { NaN; }
 
-	virtual const char* Student_header(string, string, string, string, string) { NaN; }
+	virtual const char* Student_header(string, string, string, string) { NaN; }
 	virtual const char* Name() { NaN; }
 	virtual const char* Surname() { NaN; }
 	virtual const char* MidName() { NaN; }
@@ -62,6 +62,10 @@ public:
 
 	virtual const char* GenderMan() { NaN; }
 	virtual const char* GenderFem() { NaN; }
+
+	virtual const char* EnterGBN() { NaN; }
+	virtual const char* NaNGBN() { NaN; }
+	virtual const char* EmptyDB() { NaN; }
 };
 
 class rus : public phrases {
@@ -87,19 +91,17 @@ public:
 		return str.c_str();
 	}
 	const char* ShowDB() { return "Показать базу данных"; }
-	const char* AddEntry() { return "Добавить новую запись"; }
+	const char* AddEntry() { return "Добавить новую запись о студенте"; }
+	const char* EditEntry() { return "Редатировать запись о студенте"; }
 	const char* Task44() { return "Задание варианта - 44"; }
-	const char* DBmenu_footer() {
-		return "Для редактирования или удаления используйте:\n'Показать базу данных'.\nВам необходимо выбрать студента в списке";
-	}
 
-	const char* Student_header(string DBname, string Name, string Surname, string MidName, string GradeBook) {
-		str = "База данных: " + DBname + "\n\tСтудент: " + Surname + ' ' + Name + ' ' + MidName + ", " + GradeBook;
+	const char* Student_header(string DBname, string Name, string Surname, string GradeBook) {
+		str = "База данных: " + DBname + "\n\tСтудент: " + Surname + ' ' + Name + ", " + GradeBook;
 		return str.c_str();
 	}
 	const char* Name() { return "Имя"; }
 	const char* Surname() { return "Фамилия"; }
-	const char* MidName() { return "Отчество"; }
+	const char* MidName() { return "Отчество (если есть)"; }
 	const char* Gender() { return "Пол"; }
 	const char* Gender(int16_t Gender) {
 		if (Gender == 0) return "Пол: женский";
@@ -115,7 +117,8 @@ public:
 	const char* GoEnterGr() { return "Перейти к вводу оценок"; }
 	const char* DEL_stud() { return "Удалить студента"; }
 	const char* GoDBmenu() { return "Вернуться к меню базы данных"; }
-	const char* Student_footer() { return "Если не заполнить все поля персональных данных,\nто при выходе в меню базы данных судент автоматичекси удалиться.."; }
+	const char* Student_footer() { return "Если не заполнить все поля персональных данных,\nто при выходе в меню базы данных судент автоматичекси удалится.."
+		"\n\nПрежде чем заполнять год поступления, необходимо указать дату рождения**"; }
 
 	const char* EnterErr() { return "Присутствуют недопустимые символы"; }
 	const char* EmptyErr() { return "Вы ничего не ввели. Попробуйте снова"; }
@@ -125,6 +128,10 @@ public:
 
 	const char* GenderMan() { return "Мужской"; }
 	const char* GenderFem() { return "Женский"; }
+
+	const char* EnterGBN() { return "Введите номер зачётной книжки"; }
+	const char* NaNGBN() { return "Студент с данным номером зачётной книжки не найден"; }
+	const char* EmptyDB() { return "База данных пуста"; }
 };
 
 class eng : public phrases {
@@ -150,19 +157,17 @@ public:
 		return str.c_str();
 	}
 	const char* ShowDB() { return "Show database"; }
-	const char* AddEntry() { return "Add New Entry"; }
+	const char* AddEntry() { return "Add new entry about student"; }
+	const char* EditEntry() { return "Edit entry about student"; }
 	const char* Task44() { return "Task of variant - 44"; }
-	const char* DBmenu_footer() {
-		return "To edit or delete use:\n'Show database'.\nYou must select a student in the list.";
-	}
 
-	const char* Student_header(string DBname, string Name, string Surname, string MidName, string GradeBook) {
-		str = "База данных: " + DBname + "\n\tСтудент: " + Surname + ' ' + Name + ' ' + MidName + ", " + GradeBook;
+	const char* Student_header(string DBname, string Name, string Surname, string GradeBook) {
+		str = "База данных: " + DBname + "\n\tСтудент: " + Surname + ' ' + Name + ", " + GradeBook;
 		return str.c_str();
 	}
 	const char* Name() { return "Name"; }
 	const char* Surname() { return "Surname"; }
-	const char* MidName() { return "Middle name"; }
+	const char* MidName() { return "Middle name (if there is)"; }
 	const char* Gender() { return "Gender"; }
 	const char* Gender(int16_t Gender) {
 		if (Gender == 0) return "Gender: female";
@@ -178,7 +183,8 @@ public:
 	const char* GoEnterGr() { return "Go to enter grades"; }
 	const char* DEL_stud() { return "Delete student"; }
 	const char* GoDBmenu() { return "Go to database menu"; }
-	const char* Student_footer() { return "If you don't fill in all the fields of personal data,\nwhen you exit the data base menu sudent will automatically be deleted.."; }
+	const char* Student_footer() { return "If you don't fill in all the fields of personal data,\nwhen you exit the data base menu sudent will automatically be deleted.."
+		"\n\nBefore filling in the year of receipt, you must specify the date of birth **"; }
 
 	const char* EnterErr() { return "Invalid characters present"; }
 	const char* EmptyErr() { return "You have not entered anything. Try again"; }
@@ -188,4 +194,8 @@ public:
 
 	const char* GenderMan() { return "Male"; }
 	const char* GenderFem() { return "Female"; }
+
+	const char* EnterGBN() { return "Enter gradebook number"; }
+	const char* NaNGBN() { return "Student with this gradebook number not found"; }
+	const char* EmptyDB() { return "Database is empty"; }
 };

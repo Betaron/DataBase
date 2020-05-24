@@ -140,3 +140,7 @@ const char* Student::GetFaculty(){ return Faculty; }
 const char* Student::GetDepartment() { return Department; }
 const char* Student::GetGroup(){ return Group; }
 char* Student::GetNumGB(){ return NumGB; }
+
+int Student::GetDone() {
+	return 0;
+}
