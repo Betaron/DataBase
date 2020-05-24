@@ -58,6 +58,7 @@ public:
 	virtual const char* EmptyErr() { NaN; }
 	virtual const char* Len() { NaN; }
 	virtual const char* NumRangeErr() { NaN; }
+	virtual const char* GBErr() { NaN; }
 
 	virtual const char* GenderMan() { NaN; }
 	virtual const char* GenderFem() { NaN; }
@@ -120,6 +121,7 @@ public:
 	const char* EmptyErr() { return "Вы ничего не ввели. Попробуйте снова"; }
 	const char* Len() { return "Допустимая длина слова: "; }
 	const char* NumRangeErr() { return "Некорректное число"; }
+	const char* GBErr() { return "Студент с таким номером зачётной книжки уже существует"; }
 
 	const char* GenderMan() { return "Мужской"; }
 	const char* GenderFem() { return "Женский"; }
@@ -182,6 +184,7 @@ public:
 	const char* EmptyErr() { return "You have not entered anything. Try again"; }
 	const char* Len() { return "Allowed word length: "; }
 	const char* NumRangeErr() { return "Invalid number"; }
+	const char* GBErr() { return "A student with this gradebook number already exists"; }
 
 	const char* GenderMan() { return "Male"; }
 	const char* GenderFem() { return "Female"; }

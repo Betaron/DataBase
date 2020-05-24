@@ -47,7 +47,8 @@ public:
 	int SetFaculty(phrases*);
 	int SetDepartment(phrases*);
 	int SetGroup(phrases*);
-	//int SetNumGB();
+	string SetNumGB(phrases*);
+	void SetNumGB(int, string, phrases*);
 
 	const char* GetName();
 	const char* GetSurname();

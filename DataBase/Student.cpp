@@ -2,20 +2,22 @@
 
 #define BufClean cin.clear(); cin.ignore(cin.rdbuf()->in_avail()); _flushall()
 #define Symbol BufStr[i]
-#define Digits "+-1234567890"
+#define Digits "1234567890"
 
 int setter::SetWordField(char* field, size_t fieldLen, const char* header , phrases* Sp) {
 	string BufStr;
 	size_t len;
 	uint8_t flag = 1;
-	cout << header << ": " << field << endl;
-	cout << Sp->Len() << fieldLen;
+	if (header != "") {
+		cout << header << ": " << field << endl;
+		cout << Sp->Len() << fieldLen;
+	}
 	while (flag) {
 		cout << "\n   " << setfill('.') << setw(fieldLen) << '.' << endl;
 		cout << " > ";
 		BufClean;
 		getline(cin, BufStr);
-		if (BufStr == "!Q") return 1;
+		if (BufStr == "!Q") return 2;
 		if (BufStr.empty()) {
 			cout << Sp->EmptyErr();
 			continue;
@@ -46,12 +48,13 @@ int setter::SetIntField(int16_t* field, int16_t fieldmin, int16_t fieldmax, cons
 	size_t i;
 	size_t len;
 	uint8_t flag = 1;
-	cout << header << ": " << *field << endl;
+	if (header != "")
+		cout << header << ": " << *field << endl;
 	while (flag) {
 		BufClean;
 		cout << " > ";
 		getline(cin, BufStr);
-		if (BufStr == "!Q") return 1;
+		if (BufStr == "!Q") return 2;
 		if (BufStr.empty()) {
 			cout << Sp->EmptyErr() << endl;
 			continue;
@@ -65,6 +68,7 @@ int setter::SetIntField(int16_t* field, int16_t fieldmin, int16_t fieldmax, cons
 			}
 			if (i == len - 1) flag = 0;
 		}
+		if (flag == 1) continue;
 		if (stoi(BufStr) < fieldmin || stoi(BufStr) > fieldmax) {
 			flag = 1;
 			cout << Sp->NumRangeErr() << endl;
@@ -102,13 +106,29 @@ int setter::SetDateField(Date* field, int16_t fieldmin, int16_t fieldmax, const 
 
 void Student::SetGender(uint8_t source) { Gender = source; }
 int Student::SetBirth(phrases* Sp) { return SetDateField(&Birth, 1950, 2019, Sp->Birth()); }
-int Student::SetUniversityYear(phrases* Sp) { return SetIntField(UniversityYear, Birth.GetYear() + 14, 2019, Sp->UniYear(), Sp); }
+int Student::SetUniversityYear(phrases* Sp) { 
+	if (Birth.GetYear() == 0) return 2;
+	return SetIntField(UniversityYear, Birth.GetYear() + 14, 2019, Sp->UniYear(), Sp);
+}
 int Student::SetName(phrases* Sp) { return SetWordField(Name, 20, Sp->Name(), Sp); }
 int Student::SetSurname(phrases* Sp) { return SetWordField(Surname, 20, Sp->Surname(), Sp); }
 int Student::SetMiddleName(phrases* Sp) { return SetWordField(MiddleName, 20, Sp->MidName(), Sp); }
 int Student::SetFaculty(phrases* Sp) { return SetWordField(Faculty, 10, Sp->Faculty(), Sp); }
 int Student::SetDepartment(phrases* Sp) { return SetWordField(Department, 10, Sp->Departament(), Sp); }
 int Student::SetGroup(phrases* Sp) { return SetWordField(Group, 15, Sp->Group(), Sp); }
+
+string Student::SetNumGB(phrases* Sp) {
+	char source[10] = "";
+	string res;
+	if (SetWordField(source, 10, "", Sp) == 2) res = "!Q";
+	 else res = source;
+	return res;
+}
+
+void Student::SetNumGB(int flag, string str, phrases* Sp) {
+	if (flag == 0) strcpy_s(NumGB, 10, str.c_str());
+	if (flag == 1) cout << Sp->GBErr();
+}
 
 const char* Student::GetName(){ return Name; }
 const char* Student::GetSurname(){ return Surname; }

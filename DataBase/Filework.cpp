@@ -22,7 +22,7 @@ int Filework::DB_open(phrases* Sp) {
 			{
 				cout << ex.what() << endl;
 				cout << ex.code() << endl;
-				cout << Sp->Ferr() << endl << ">> ";
+				cout << Sp->Ferr() << endl;
 				continue;
 			}
 			if (DB.peek() == EOF) {
@@ -60,7 +60,7 @@ int Filework::DB_create(phrases* Sp) {
 		{
 			cout << Sp->Ftry() << endl;
 			DB.open(DB_name + ".sdb", ios::in | ios::binary);
-			cout << Sp->FceateErr() << endl << ">> ";
+			cout << Sp->FceateErr() << endl;
 			DB.close();
 			continue;
 		}

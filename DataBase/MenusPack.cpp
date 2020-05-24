@@ -74,6 +74,7 @@ int MenusPack::GenderMenu() {
 int MenusPack::StudentMenu(Student*) {
 	int res;
 	Date DefaultDate;
+	string str;
 	while (44) {
 		switch (Builder->MenuCreate(Sp->Student_header(Libr.GetDB_short_name(),
 			CurrentStudent->GetName(), CurrentStudent->GetSurname(),
@@ -91,22 +92,34 @@ int MenusPack::StudentMenu(Student*) {
 		case 6:while (!(res = CurrentStudent->SetFaculty(Sp))) {} break;
 		case 7:while (!(res = CurrentStudent->SetDepartment(Sp))) {} break;
 		case 8:while (!(res = CurrentStudent->SetGroup(Sp))) {} break;
-		case 9:while (!(res = CurrentStudent->SetNumGB())) {} break;
+		case 9:
+			cout << Sp->GrBookNum() << ": " << CurrentStudent->GetNumGB() << endl;
+			cout << Sp->Len() << 10;
+			while (44) {
+				str = CurrentStudent->SetNumGB(Sp);
+				if (str == "!Q") break;
+				if (StudentsCreator.FindGB(str) == nullptr) {
+					CurrentStudent->SetNumGB(0, str, Sp);
+					break;
+				}
+				else CurrentStudent->SetNumGB(1, str, Sp);
+			}
+			break;
 		case 10:break;
 		case 11:
 			StudentsCreator.item_delete();
 			return 0;
 			break;
 		case 12:
-			if (CurrentStudent->GetName() != "-" &&
-				CurrentStudent->GetSurname() != "-"&&
-				CurrentStudent->GetMiddleName() != "-"&&
-				CurrentStudent->GetGender() != -1 &&
-				CurrentStudent->GetBirth() != DefaultDate &&
-				CurrentStudent->GetUniversityYear() != 0 &&
-				CurrentStudent->GetFaculty() != "-" &&
-				CurrentStudent->GetDepartment() != "-" &&
-				CurrentStudent->GetGroup() != "-") {
+			if (CurrentStudent->GetName() == "-" ||
+				CurrentStudent->GetSurname() == "-" ||
+				CurrentStudent->GetMiddleName() == "-" ||
+				CurrentStudent->GetGender() == -1 ||
+				CurrentStudent->GetBirth() == DefaultDate ||
+				CurrentStudent->GetUniversityYear() == 0 ||
+				CurrentStudent->GetFaculty() == "-" ||
+				CurrentStudent->GetDepartment() == "-" ||
+				CurrentStudent->GetGroup() == "-") {
 				StudentsCreator.item_delete();
 			}
 			return 0;
@@ -116,3 +129,4 @@ int MenusPack::StudentMenu(Student*) {
 		}
 	}
 }
+

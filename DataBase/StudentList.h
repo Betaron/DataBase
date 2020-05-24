@@ -39,6 +39,8 @@ public:
 	void moveCursor(uint8_t);
 	uint8_t getListStatus();
 
+	list* FindGB(string);
+
 	list* GetHead() { return Item_Head; }
 	list* GetItem() { return Item_Current; }
 };
