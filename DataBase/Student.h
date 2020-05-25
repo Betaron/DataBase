@@ -5,11 +5,37 @@
 #include "Date.h"
 #include "GUIPhrases.h"
 
-class setter {
+class setter
+{
 public:
 	int SetWordField(char*, size_t, const char*, phrases*);
 	int SetIntField(int16_t*,int16_t, int16_t, const char*, phrases*);
 	int SetDateField(Date*, int16_t, int16_t, const char*);
+};
+
+class Subject : public setter
+{
+private:
+	char Title[31] = "";
+	int8_t Mark;
+public:
+	Subject() {
+		*Title = '-';
+		Mark = 0;
+	}
+	const char* GetTitle() { return Title; }
+	int8_t GetMark() { return Mark; }
+	int SetTitle(phrases*);
+	void SetMark(int8_t source) { Mark = source; }
+	void SetTitleDefault();
+	void SetMarkDefault();
+
+};
+
+class Education
+{
+public:
+	Subject subjects[10];
 };
 
 class Student : setter
@@ -25,6 +51,7 @@ private:
 	char Department[11] = "";
 	char Group[16] = "";
 	char NumGB[11] = ""; //number of grade book
+	Education session[9];
 public:
 	Student() {
 		*Name = '-';
@@ -59,6 +86,8 @@ public:
 	const char* GetFaculty();
 	const char* GetDepartment();
 	const char* GetGroup();
-	char* GetNumGB();
+	const char* GetNumGB();
 	int GetDone();
+	Education* GetSession();
 };
+

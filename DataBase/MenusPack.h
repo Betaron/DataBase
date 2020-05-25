@@ -18,7 +18,6 @@ public:
 		delete Sp;
 		delete Builder;
 	}
-	//string strNum(const char*);
 	int MainMenu();
 	int LangMenu();
 	int DatabaseMenu();
@@ -26,4 +25,9 @@ public:
 	int GenderMenu();
 	int EnterGB_Screen();
 	int ShowDB();
+	int GradesMenu();
+	int ShowGr();
+	int EditGrades();
+	int GradeMenu(int16_t, int16_t);
+	int QuitWarningMenu();
 };

@@ -10,7 +10,7 @@ int setter::SetWordField(char* field, size_t fieldLen, const char* header , phra
 	uint8_t flag = 1;
 	if (header != "") {
 		cout << header << ": " << field << endl;
-		cout << Sp->Len() << fieldLen;
+		cout << Sp->Len() << ": " << fieldLen;
 	}
 	while (flag) {
 		cout << "\n   " << setfill('.') << setw(fieldLen) << '.' << endl;
@@ -24,7 +24,7 @@ int setter::SetWordField(char* field, size_t fieldLen, const char* header , phra
 		}
 		len = BufStr.length();
 		if (len > fieldLen) {
-			cout << Sp->Len() << fieldLen;
+			cout << Sp->Len() << ": " << fieldLen;
 			continue;
 		}
 		for (size_t i = 0; i < len; i++) {
@@ -60,6 +60,10 @@ int setter::SetIntField(int16_t* field, int16_t fieldmin, int16_t fieldmax, cons
 			continue;
 		}
 		len = BufStr.length();
+		if (len > 9) {
+			cout << Sp->EnterErr() << endl;
+			continue;
+		}
 		(BufStr[1] == '+' || BufStr[1] == '-') ? i = 1 : i = 0;
 		for (; i < len; i++) {
 			if (!(((int)Symbol >= 48 && (int)Symbol <= 57))) {
@@ -85,14 +89,15 @@ int setter::SetDateField(Date* field, int16_t fieldmin, int16_t fieldmax, const 
 		BufClean;
 		cout << " > ";
 		cin >> D;
-		if (D == "!Q") return 1;
+		if (D == "!Q") return 2;
 		if (cin.bad()) continue;
 		cin >> M;
-		if (M == "!Q") return 1;
+		if (M == "!Q") return 2;
 		if (cin.bad()) continue;
 		cin >> Y;
-		if (Y == "!Q") return 1;
+		if (Y == "!Q") return 2;
 		if (cin.bad()) continue;
+		if (D.length() > 4 || M.length() > 4 || Y.length() > 4)continue;
 		if (!D.find_first_not_of(Digits)) continue;
 		if (!M.find_first_not_of(Digits)) continue;
 		if (!Y.find_first_not_of(Digits)) continue;
@@ -107,7 +112,11 @@ int setter::SetDateField(Date* field, int16_t fieldmin, int16_t fieldmax, const 
 void Student::SetGender(uint8_t source) { Gender = source; }
 int Student::SetBirth(phrases* Sp) { return SetDateField(&Birth, 1950, 2019, Sp->Birth()); }
 int Student::SetUniversityYear(phrases* Sp) { 
-	if (Birth.GetYear() == 0) return 2;
+	if (Birth.GetYear() == 0) {
+		Sp->BegSetBurth();
+		system("cls");
+		return 2;
+	}
 	return SetIntField(UniversityYear, Birth.GetYear() + 14, 2019, Sp->UniYear(), Sp);
 }
 int Student::SetName(phrases* Sp) { return SetWordField(Name, 20, Sp->Name(), Sp); }
@@ -139,7 +148,8 @@ int16_t Student::GetUniversityYear(){ return *UniversityYear; }
 const char* Student::GetFaculty(){ return Faculty; }
 const char* Student::GetDepartment() { return Department; }
 const char* Student::GetGroup(){ return Group; }
-char* Student::GetNumGB(){ return NumGB; }
+const char* Student::GetNumGB(){ return NumGB; }
+Education* Student::GetSession() { return session; }
 
 int Student::GetDone() {
 	int Done(0);
@@ -153,4 +163,17 @@ int Student::GetDone() {
 	if (strcmp(Group, "-")) Done++;
 	if (strcmp(NumGB, "-")) Done++;
 	return Done;
+}
+
+int Subject::SetTitle(phrases* Sp) {
+	return SetWordField(Title, 30, Sp->Title() , Sp);
+}
+
+void Subject::SetTitleDefault() {
+	for (uint8_t i = 0; i < 31; i++) Title[i] = 0;
+	Title[0] = '-';
+}
+
+void Subject::SetMarkDefault() {
+	Mark = 0;
 }

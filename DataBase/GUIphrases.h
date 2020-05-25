@@ -12,7 +12,7 @@ protected:
 	string _str;
 public:
 	phrases() {
-		system("mode con cols=145 lines=25");
+		//system("mode con cols=145 lines=25");
 		SetConsoleCP(1251);
 		SetConsoleOutputCP(1251);
 	}
@@ -33,18 +33,24 @@ public:
 	virtual const char* Femp() { NaN; }
 	virtual const char* FnDB() { NaN; }
 	virtual const char* FceateErr() { NaN; }
-	virtual const char* DBmenu_header(string) { NaN; }
+	virtual const char* DBmenu_header(string  DBname) { NaN; }
 	virtual const char* ShowDB() { NaN; }
 	virtual const char* AddEntry() { NaN; }
 	virtual const char* EditEntry() { NaN; }
 	virtual const char* Task44() { NaN; }
 
-	virtual const char* Student_header(string, string, string, string) { NaN; }
+	virtual const char* Passed() { NaN; }
+	virtual const char* NotPassed() { NaN; }
+	virtual const char* Satisf() { NaN; }
+	virtual const char* Good() { NaN; }
+	virtual const char* Great() { NaN; }
+	virtual const char* Student_header(string DBname, string Name, string Surname, string GradeBook) { NaN; }
+	virtual const char* Student_header(string DBname, string Name, string Surname, string GradeBook, int16_t Session, int16_t subj, string title, int8_t _mark) { NaN; }
 	virtual const char* Name() { NaN; }
 	virtual const char* Surname() { NaN; }
 	virtual const char* MidName() { NaN; }
 	virtual const char* Gender() { NaN; }
-	virtual const char* Gender(int16_t) { NaN; }
+	virtual const char* Gender(int16_t Gender) { NaN; }
 	virtual const char* Birth() { NaN; }
 	virtual const char* UniYear() { NaN; }
 	virtual const char* Faculty() { NaN; }
@@ -54,13 +60,14 @@ public:
 	virtual const char* GoEnterGr() { NaN; }
 	virtual const char* DEL_stud() { NaN; }
 	virtual const char* GoDBmenu() { NaN; }
-	virtual const char* Student_footer(int) { NaN; }
+	virtual const char* Student_footer(int Done) { NaN; }
 
 	virtual const char* EnterErr() { NaN; }
 	virtual const char* EmptyErr() { NaN; }
 	virtual const char* Len() { NaN; }
 	virtual const char* NumRangeErr() { NaN; }
 	virtual const char* GBErr() { NaN; }
+	virtual const char* BegSetBurth() { NaN; }
 
 	virtual const char* GenderMan() { NaN; }
 	virtual const char* GenderFem() { NaN; }
@@ -68,6 +75,26 @@ public:
 	virtual const char* EnterGBN() { NaN; }
 	virtual const char* NaNGBN() { NaN; }
 	virtual const char* EmptyDB() { NaN; }
+
+	virtual const char* FillErr() { NaN; }
+	virtual const char* ShowGr() { NaN; }
+	virtual const char* SessNum_screen() { NaN; }
+	virtual const char* SubjNum_screen(int session) { NaN; }
+	virtual const char* EnterSession() { NaN; }
+	virtual const char* Session() { NaN; }
+	virtual const char* SessionEmpty() { NaN; }
+	virtual const char* EditGrField() { NaN; }
+	virtual const char* GoToStodMenu() { NaN; }
+	virtual const char* PreSessErr() { NaN; }
+	virtual const char* Title() { NaN; }
+	virtual const char* NextSubj() { NaN; }
+	virtual const char* PrevSubj() { NaN; }
+	virtual const char* CleanGrade() { NaN; }
+	virtual const char* Gr_footer() { NaN; }
+
+	virtual const char* Warning_header() { NaN; }
+	virtual const char* Yes() { NaN; }
+	virtual const char* No() { NaN; }
 };
 
 class rus : public phrases {
@@ -97,8 +124,29 @@ public:
 	const char* EditEntry() { return "Редатировать запись о студенте"; }
 	const char* Task44() { return "Задание варианта - 44"; }
 
+	const char* Passed() { return "Зачёт"; }
+	const char* NotPassed() { return "Незачёт"; }
+	const char* Satisf() { return "3 (Удовл.)"; }
+	const char* Good() { return "4 (Хор.)"; }
+	const char* Great() { return "5 (Отл.)"; }
 	const char* Student_header(string DBname, string Name, string Surname, string GradeBook) {
 		str = "База данных: " + DBname + "\n\tСтудент: " + Surname + ' ' + Name + ", " + GradeBook;
+		return str.c_str();
+	}
+	const char* Student_header(string DBname, string Name, string Surname, string GradeBook, int16_t Session, int16_t subj, string title, int8_t _mark) {
+		const char* mark;
+		switch (_mark)
+		{
+		case 1:mark = Passed(); break;
+		case 2:mark = NotPassed(); break;
+		case 3:mark = Satisf(); break;
+		case 4:mark = Good(); break;
+		case 5:mark = Great(); break;
+		default:mark = "NaN"; break;
+		}
+		str = "База данных: " + DBname + "\n\tСтудент: " + Surname + ' ' + Name + ", " + GradeBook +
+			"\n\t\tСессия: " + to_string(Session + 1) +
+			"\n\t\tПредмет: " + to_string(subj + 1) + ", " + title + " - " + mark;
 		return str.c_str();
 	}
 	const char* Name() { return "Имя"; }
@@ -118,19 +166,20 @@ public:
 	const char* GrBookNum() { return "Номер зачётной книжки"; }
 	const char* GoEnterGr() { return "Перейти к вводу оценок"; }
 	const char* DEL_stud() { return "Удалить студента"; }
-	const char* GoDBmenu() { return "Вернуться к меню базы данных"; }
-	const char* Student_footer(int Done) { 
-		this->_str = to_string(Done) + "/9 полей заполнено\n" +
-		"Если не заполнить все поля персональных данных,\nто при выходе в меню базы данных судент автоматичекси удалится.." +
-		"\n\nПрежде чем заполнять год поступления, необходимо указать дату рождения**";
-		return this->_str.c_str();
+	const char* GoDBmenu() { return "Вернуться в меню базы данных"; }
+	const char* Student_footer(int Done) {
+		_str = to_string(Done) + "/9 полей заполнено\n" +
+			"Если не заполнить все поля персональных данных,\nто при выходе в меню базы данных судент автоматичекси удалится.." +
+			"\n\nПрежде чем заполнять год поступления, необходимо указать дату рождения**";
+		return _str.c_str();
 	}
 
 	const char* EnterErr() { return "Присутствуют недопустимые символы"; }
 	const char* EmptyErr() { return "Вы ничего не ввели. Попробуйте снова"; }
-	const char* Len() { return "Допустимая длина слова: "; }
+	const char* Len() { return "Допустимая длина слова"; }
 	const char* NumRangeErr() { return "Некорректное число"; }
 	const char* GBErr() { return "Студент с таким номером зачётной книжки уже существует"; }
+	const char* BegSetBurth() { return "Сначала укажите дату рождения"; }
 
 	const char* GenderMan() { return "Мужской"; }
 	const char* GenderFem() { return "Женский"; }
@@ -138,7 +187,34 @@ public:
 	const char* EnterGBN() { return "Введите номер зачётной книжки"; }
 	const char* NaNGBN() { return "Студент с данным номером зачётной книжки не найден"; }
 	const char* EmptyDB() { return "База данных пуста"; }
+
+	const char* FillErr() { return "Прежде чем перейти к вводу данных о сессии заполние поля персональных данных"; }
+	const char* ShowGr() { return "Показать все оценки"; }
+	const char* SessNum_screen() { return "Введите номер сессии"; }
+	const char* SubjNum_screen(int session) {
+		str = "Сессия: " + to_string(session) + "\nВведите номер предмета";
+		return str.c_str();
+	}
+	const char* Session() { return "Сессия"; }
+	const char* EnterSession() { return "Ввести сессию"; }
+	const char* SessionErr() { return "Данная сессия уже заполнялась.\nДля редактирования воспользуйтесь соответствующим пунктом меню"; }
+	const char* SessionEmpty() { return "Не найдено ни одной заполненной сессии"; }
+	const char* EditGrField() { return "Редактировать оценки"; }
+	const char* GoToStodMenu() { return "Вернуться в меню студента"; }
+
+	const char* PreSessErr() { return "Заполните предыдущие сессии"; }
+	const char* Title() { return "Наименование предмета"; }
+
+	const char* NextSubj() { return "Перейти к следующему предмету"; }
+	const char* PrevSubj() { return "Перейти к предыдущему предмету"; }
+	const char* CleanGrade() { return "Очистить предмет и оценку"; }
+	const char* Gr_footer() { return "Если не заполнить оба поля оценки, то они не сохраниться"; }
+
+	const char* Warning_header() { return "Вы уверены, что хотите выйти?\nЗапись не сохранится"; }
+	const char* Yes() { return "Да, выйти"; }
+	const char* No() { return "Нет, остаться"; }
 };
+
 
 class eng : public phrases {
 public:
@@ -167,8 +243,30 @@ public:
 	const char* EditEntry() { return "Edit entry about student"; }
 	const char* Task44() { return "Task of variant - 44"; }
 
+
+	const char* Passed() { return "Passed"; }
+	const char* NotPassed() { return "NotPassed"; }
+	const char* Satisf() { return "3 (Satisf.)"; }
+	const char* Good() { return "4 (Good)"; }
+	const char* Great() { return "5 (Great)"; }
 	const char* Student_header(string DBname, string Name, string Surname, string GradeBook) {
-		str = "База данных: " + DBname + "\n\tСтудент: " + Surname + ' ' + Name + ", " + GradeBook;
+		str = "Database: " + DBname + "\n\tStudent: " + Surname + ' ' + Name + ", " + GradeBook;
+		return str.c_str();
+	}
+	const char* Student_header(string DBname, string Name, string Surname, string GradeBook, int16_t Session, int16_t subj, string title, int8_t _mark) {
+		const char* mark;
+		switch (_mark)
+		{
+		case 1:mark = Passed(); break;
+		case 2:mark = NotPassed(); break;
+		case 3:mark = Satisf(); break;
+		case 4:mark = Good(); break;
+		case 5:mark = Great(); break;
+		default:mark = "NaN"; break;
+		}
+		str = "Database: " + DBname + "\n\tStudent: " + Surname + ' ' + Name + ", " + GradeBook +
+			"\n\t\tSession: " + to_string(Session + 1) +
+			"\n\t\tSubject: " + to_string(subj + 1) + ", " + title + " - " + mark;
 		return str.c_str();
 	}
 	const char* Name() { return "Name"; }
@@ -188,19 +286,20 @@ public:
 	const char* GrBookNum() { return "Gradebook number"; }
 	const char* GoEnterGr() { return "Go to enter grades"; }
 	const char* DEL_stud() { return "Delete student"; }
-	const char* GoDBmenu() { return "Go to database menu"; }
+	const char* GoDBmenu() { return "Return to database menu"; }
 	const char* Student_footer(int Done) { 
-		this->_str = to_string(Done) + "/9 fields filled\n" +
+		_str = to_string(Done) + "/9 fields filled\n" +
 		"If you don't fill in all the fields of personal data,\nwhen you exit the data base menu sudent will automatically be deleted.." +
 		"\n\nBefore filling in the year of receipt, you must specify the date of birth **"; 
-		return this->_str.c_str();
+		return _str.c_str();
 	}
 
 	const char* EnterErr() { return "Invalid characters present"; }
 	const char* EmptyErr() { return "You have not entered anything. Try again"; }
-	const char* Len() { return "Allowed word length: "; }
+	const char* Len() { return "Allowed word length"; }
 	const char* NumRangeErr() { return "Invalid number"; }
 	const char* GBErr() { return "A student with this gradebook number already exists"; }
+	const char* BegSetBurth() { return "First enter date of birth"; }
 
 	const char* GenderMan() { return "Male"; }
 	const char* GenderFem() { return "Female"; }
@@ -208,4 +307,29 @@ public:
 	const char* EnterGBN() { return "Enter gradebook number"; }
 	const char* NaNGBN() { return "Student with this gradebook number not found"; }
 	const char* EmptyDB() { return "Database is empty"; }
+
+	const char* FillErr() { return "Before moving on to entering session data, fill in the personal data fields"; }
+	const char* ShowGr() { return "Show all grades"; }
+	const char* SessNum_screen() { return "Enter session number"; }
+	const char* SubjNum_screen(int session) {
+	str = "Session: " + to_string(session) + "\nEnter subject number";
+	return str.c_str();
+	}
+	const char* Session() { return "Session"; }
+	const char* EnterSession() { return "Enter session"; }
+	const char* SessionEmpty() { return "No filled sessions found"; }
+	const char* EditGrField() { return "Edit Grade Field"; }
+	const char* GoToStodMenu() { return "Return to student menu"; }
+
+	const char* PreSessErr() { return "Fill in previous sessions"; }
+	const char* Title() { return "Item Name"; }
+	
+	const char* NextSubj() { return "Go to the next subject"; }
+	const char* PrevSubj() { return "Go to previous item"; }
+	const char* CleanGrade() { return "Clear item and grade"; }
+	const char* Gr_footer() { return "If you do not fill out both assessment fields, they will not be saved"; }
+
+	const char* Warning_header() { return "Are you sure you want to quit?\nThe entry will not be saved"; }
+	const char* Yes() { return "Yes, quit"; }
+	const char* No() { return "No, stay"; }
 };

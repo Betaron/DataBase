@@ -58,6 +58,7 @@ int MenusPack::DatabaseMenu() {
 		case 4:
 			Libr.CloseDB();
 			return 0;
+			break;
 		default:
 			break;
 		}
@@ -85,18 +86,18 @@ int MenusPack::StudentMenu(Student*) {
 			Sp->UniYear(), Sp->Faculty(), Sp->Department(), Sp->Group(), Sp->GrBookNum(),
 			Sp->GoEnterGr(),Sp->DEL_stud(), Sp->GoDBmenu()))
 		{
-		case 0:while (!(CurrentStudent->SetSurname(Sp))) {} break;
-		case 1:while (!(CurrentStudent->SetName(Sp))) {} break;
-		case 2:while (!(CurrentStudent->SetMiddleName(Sp))) {} break;
+		case 0:CurrentStudent->SetSurname(Sp); break;
+		case 1:CurrentStudent->SetName(Sp); break;
+		case 2:CurrentStudent->SetMiddleName(Sp); break;
 		case 3:StudentsCreator.GetItem()->stud->SetGender(GenderMenu()); break;
-		case 4:while (!(CurrentStudent->SetBirth(Sp))) {} break;
-		case 5:while (!(CurrentStudent->SetUniversityYear(Sp))) {} break;
-		case 6:while (!(CurrentStudent->SetFaculty(Sp))) {} break;
-		case 7:while (!(CurrentStudent->SetDepartment(Sp))) {} break;
-		case 8:while (!(CurrentStudent->SetGroup(Sp))) {} break;
+		case 4:CurrentStudent->SetBirth(Sp); break;
+		case 5:CurrentStudent->SetUniversityYear(Sp); break;
+		case 6:CurrentStudent->SetFaculty(Sp); break;
+		case 7:CurrentStudent->SetDepartment(Sp); break;
+		case 8:CurrentStudent->SetGroup(Sp); break;
 		case 9:
 			cout << Sp->GrBookNum() << ": " << CurrentStudent->GetNumGB() << endl;
-			cout << Sp->Len() << 10;
+			cout << Sp->Len() << ": " << 10;
 			while (44) {
 				str = CurrentStudent->SetNumGB(Sp);
 				if (str == "!Q") break;
@@ -107,7 +108,15 @@ int MenusPack::StudentMenu(Student*) {
 				else CurrentStudent->SetNumGB(1, str, Sp);
 			}
 			break;
-		case 10:break;
+		case 10:
+			if (CurrentStudent->GetDone() == 9)
+				GradesMenu();
+			else {
+				system("cls");
+				cout << Sp->FillErr() << endl << endl;
+				system("pause;");
+			}
+			break;
 		case 11:
 			StudentsCreator.item_delete();
 			return 0;
@@ -122,9 +131,11 @@ int MenusPack::StudentMenu(Student*) {
 				CurrentStudent->GetDepartment() == "-" ||
 				CurrentStudent->GetGroup() == "-" ||
 				CurrentStudent->GetNumGB() == "-") {
-				StudentsCreator.item_delete();
+				if (QuitWarningMenu()) {
+					StudentsCreator.item_delete();
+					return 0;
+				}
 			}
-			return 0;
 			break;
 		default:
 			break;
@@ -142,7 +153,7 @@ int MenusPack::EnterGB_Screen() {
 	list* noname;
 	system("cls");
 	cout << Sp->EnterGBN() << endl;
-	cout << Sp->Len() << 10 << endl;
+	cout << Sp->Len() << ": " << 10 << endl;
 	while (44) {
 		str = StudentsCreator.GetItem()->stud->SetNumGB(Sp);
 		if (str == "!Q") return 2;
@@ -200,4 +211,165 @@ int MenusPack::ShowDB() {
 	} while (StudentsCreator.GetItem() != StudentsCreator.GetHead()->next_item);
 	system("pause");
 	return 0;
+}
+
+int MenusPack::GradesMenu() {
+	while (44) {
+		switch (Builder->MenuCreate(Sp->Student_header(Libr.GetDB_short_name(),
+			CurrentStudent->GetName(), CurrentStudent->GetSurname(), CurrentStudent->GetNumGB()), "",
+			3, Sp->ShowGr(), Sp->EditGrField(), Sp->GoToStodMenu()))
+		{
+		case 0:
+			ShowGr();
+			break;
+		case 1:
+			EditGrades();
+			break;
+		case 2:
+			return 0;
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+int MenusPack::ShowGr() {
+	uint8_t is_empty = 1;
+	for (int j = 0; j < 10; j++) {
+		if (CurrentStudent->GetSession()[0].subjects[j].GetMark() != 0) {
+			is_empty = 0;
+			break;
+		}
+	}
+
+	if (is_empty) {
+		cout << Sp->SessionEmpty() << endl << endl;
+		system("pause");
+		return 2;
+	}
+	cout << Sp->Student_header(Libr.GetDB_short_name(),
+		CurrentStudent->GetName(), CurrentStudent->GetSurname(), CurrentStudent->GetNumGB()) << endl;
+
+	for (int i = 0; i < 9; i++) {
+		cout << Sp->Session() << ": " << i + 1 << endl;
+		for (int j = 0; j < 10; j++) {
+			if (CurrentStudent->GetSession()[i].subjects[j].GetMark() != 0) {
+				int8_t _mark = CurrentStudent->GetSession()[i].subjects[j].GetMark();
+				const char* mark;
+				switch (_mark)
+				{
+				case 1:mark = Sp->Passed(); break;
+				case 2:mark = Sp->NotPassed(); break;
+				case 3:mark = Sp->Satisf(); break;
+				case 4:mark = Sp->Good(); break;
+				case 5:mark = Sp->Great(); break;
+				default:mark = "NaN"; break;
+				}
+				cout << setfill(' ') << i << '.' << j << '\t' << 
+					setw(30) << left << CurrentStudent->GetSession()[i].subjects[j].GetTitle() << mark << endl;
+			}
+		}
+		cout << endl;
+	}
+	system("pause");
+	return 0;
+}
+
+int MenusPack::EditGrades() {
+	system("cls");
+	int16_t* SessionNumber = new int16_t;
+	int16_t* SubjectNumber = new int16_t;
+	uint8_t is_empty;
+	*SessionNumber = 0;
+	*SubjectNumber = 0;
+	cout << Sp->SessNum_screen() << endl;
+	while (44) {
+		if (CurrentStudent->GetSession()->subjects->SetIntField(SessionNumber, 1, 9, "", Sp) == 2) return 0;
+		*SessionNumber = *SessionNumber - 1;
+		is_empty = 1;
+		if (*SessionNumber > 0) {
+			for (int j = 0; j < 10; j++) {
+				if (CurrentStudent->GetSession()[*SessionNumber - 1].subjects[j].GetTitle() != "-") {
+					is_empty = 0;
+					break;
+				}
+			}
+		}
+		if (!is_empty) {
+			cout << Sp->PreSessErr() << endl;
+			continue;
+		}
+		else break;
+	}
+	system("cls");
+	cout << Sp->SubjNum_screen(*SessionNumber + 1) << endl;
+	if (CurrentStudent->GetSession()->subjects->SetIntField(SubjectNumber, 1, 10, "", Sp) == 2) return 0;
+	GradeMenu(*SessionNumber, *SubjectNumber - 1);
+	delete SubjectNumber;
+	delete SessionNumber;
+	return 0;
+}
+
+int MenusPack::GradeMenu(int16_t sessNum, int16_t _subjNum) {
+	int16_t subjNum = _subjNum;
+	while (44) {
+		switch (Builder->MenuCreate(Sp->Student_header(Libr.GetDB_short_name(),
+			CurrentStudent->GetName(), CurrentStudent->GetSurname(), CurrentStudent->GetNumGB(),
+			sessNum, subjNum, CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetTitle(),
+			CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetMark()), Sp->Gr_footer(),
+			10, Sp->NextSubj(), Sp->PrevSubj(), Sp->Title(), Sp->Passed(), Sp->NotPassed(), Sp->Satisf(), Sp->Good(), Sp->Great(),
+			Sp->CleanGrade(), Sp->GoToStodMenu()))
+		{
+		case 0:
+			if (CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetTitle() == "-" ||
+				CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetMark() == 0) {
+				CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetTitleDefault();
+				CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMarkDefault();
+			}
+			if (subjNum < 9) subjNum++;
+			break;
+		case 1:
+			if (CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetTitle() == "-" ||
+				CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetMark() == 0) {
+				CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetTitleDefault();
+				CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMarkDefault();
+			}
+			if (subjNum > 0) subjNum--;
+			break;
+		case 2:CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetTitle(Sp); break;
+		case 3:CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMark(1); break;
+		case 4:CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMark(2); break;
+		case 5:CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMark(3); break;
+		case 6:CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMark(4); break;
+		case 7:CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMark(5); break;
+		case 8:
+			CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetTitleDefault();
+			CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMarkDefault();
+			break;
+		case 9:
+			if (CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetTitle() == "-" ||
+				CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetMark() == 0) {
+				if (QuitWarningMenu()) {
+					CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetTitleDefault();
+					CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMarkDefault();
+					return 0;
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+int MenusPack::QuitWarningMenu() {
+	while (44){
+		switch (Builder->MenuCreate(Sp->Warning_header(), "", 2, Sp->Yes(), Sp->No()))
+		{
+		case 0:return 1;
+		case 1:return 0;
+		default:break;
+		}
+	}
 }
