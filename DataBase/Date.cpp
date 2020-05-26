@@ -15,8 +15,9 @@ int Date::SetDate(int DD, int MM, int YYYY) {
 				if (YYYY % 4 != 0) {
 					if (DD <= 28) this->DD = DD;
 				}
-				if (YYYY % 4 == 0)
+				if (YYYY % 4 == 0) {
 					if (DD <= 29) this->DD = DD;
+				}
 			}
 			else if (DD <= 30) this->DD = DD;
 		}

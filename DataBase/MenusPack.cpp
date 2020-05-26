@@ -1,6 +1,22 @@
 #include "MenusPack.h"
 
+
 #define CurrentStudent StudentsCreator.GetItem()->stud
+
+void  MenusPack::DrawHelloScreen() {
+	cout << "\n\n     _____             __              __              " << endl;
+	cout << "    / ___/ __  __ ____/ /___   ____   / /_ _____       " << endl;
+	cout << "    \\__ \\ / / / // __  // _ \\ / __ \\ / __// ___/       " << endl;
+	cout << "   ___/ // /_/ // /_/ //  __// / / // /_ (__  )        " << endl;
+	cout << "  /____/ \\__,_/ \\__,_/ \\___//_/ /_/ \\__//____/         " << endl;
+	cout << "      ____          __          __                     " << endl;
+	cout << "     / __ \\ ____ _ / /_ ____ _ / /_   ____ _ _____ ___ " << endl;
+	cout << "    / / / // __ `// __// __ `// __ \\ / __ `// ___// _ \\" << endl;
+	cout << "   / /_/ // /_/ // /_ / /_/ // /_/ // /_/ /(__  )/  __/" << endl;
+	cout << "  /_____/ \\__,_/ \\__/ \\__,_//_.___/ \\__,_//____/ \\___/ " << endl;
+	cout << "\n                                  by Agabalaev Ivan\n\n";
+	system("pause");
+}
 
 int MenusPack::MainMenu() {
 	while (44) {
@@ -14,6 +30,12 @@ int MenusPack::MainMenu() {
 			break;
 		case 1:
 			if (Libr.DB_open(Sp)) {
+				Student student;
+				while (Libr.ReadStudent(&student)){
+					StudentsCreator.item_add(student);
+				}
+				StudentsCreator.Set_to_start();
+				Libr.CloseDB();
 				DatabaseMenu();
 			}
 			break;
@@ -41,8 +63,8 @@ int MenusPack::LangMenu() {
 
 int MenusPack::DatabaseMenu() {
 	while (44) {
-		switch (Builder->MenuCreate(Sp->DBmenu_header(Libr.GetDB_short_name()), "",
-			5, Sp->ShowDB(), Sp->AddEntry(), Sp->EditEntry(), Sp->Task44(), Sp->GoMM()))
+		switch (Builder->MenuCreate(Sp->DBmenu_header(Libr.GetDB_short_name()), Sp->DBmenu_footer(),
+			6, Sp->ShowDB(), Sp->AddEntry(), Sp->EditEntry(), Sp->Task44(), Sp->SaveDB(), Sp->GoMM()))
 		{
 		case 0:
 			ShowDB();
@@ -56,8 +78,21 @@ int MenusPack::DatabaseMenu() {
 		case 3:
 			break;
 		case 4:
-			Libr.CloseDB();
-			return 0;
+			Libr.ReOpenDB();
+			if (StudentsCreator.getListStatus()) {
+				StudentsCreator.Set_to_start();
+				do {
+					Libr.WriteStudent(*CurrentStudent);
+					StudentsCreator.moveCursor(1);
+				} while (StudentsCreator.GetItem() != StudentsCreator.GetHead()->next_item);
+				Libr.CloseDB();
+			}
+			break;
+		case 5:
+			if (QuitWarningMenu(Sp->Warning_header2())) {
+				StudentsCreator.list_delete();
+				return 0;
+			}
 			break;
 		default:
 			break;
@@ -131,11 +166,12 @@ int MenusPack::StudentMenu(Student*) {
 				CurrentStudent->GetDepartment() == "-" ||
 				CurrentStudent->GetGroup() == "-" ||
 				CurrentStudent->GetNumGB() == "-") {
-				if (QuitWarningMenu()) {
+				if (QuitWarningMenu(Sp->Warning_header1())) {
 					StudentsCreator.item_delete();
 					return 0;
 				}
 			}
+			else return 0;
 			break;
 		default:
 			break;
@@ -208,6 +244,7 @@ int MenusPack::ShowDB() {
 			'|' << setw(10) << left << CurrentStudent->GetDepartment() << '|' << endl;
 		cout << setw(145) << setfill(B) << B << endl;
 		StudentsCreator.moveCursor(1);
+		Number++;
 	} while (StudentsCreator.GetItem() != StudentsCreator.GetHead()->next_item);
 	system("pause");
 	return 0;
@@ -266,7 +303,7 @@ int MenusPack::ShowGr() {
 				case 5:mark = Sp->Great(); break;
 				default:mark = "NaN"; break;
 				}
-				cout << setfill(' ') << i << '.' << j << '\t' << 
+				cout << setfill(' ') << i + 1 << '.' << j + 1 << '\t' <<
 					setw(30) << left << CurrentStudent->GetSession()[i].subjects[j].GetTitle() << mark << endl;
 			}
 		}
@@ -350,12 +387,13 @@ int MenusPack::GradeMenu(int16_t sessNum, int16_t _subjNum) {
 		case 9:
 			if (CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetTitle() == "-" ||
 				CurrentStudent->GetSession()[sessNum].subjects[subjNum].GetMark() == 0) {
-				if (QuitWarningMenu()) {
+				if (QuitWarningMenu(Sp->Warning_header1())) {
 					CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetTitleDefault();
 					CurrentStudent->GetSession()[sessNum].subjects[subjNum].SetMarkDefault();
 					return 0;
-				}
+				}			
 			}
+			else return 0;
 			break;
 		default:
 			break;
@@ -363,9 +401,9 @@ int MenusPack::GradeMenu(int16_t sessNum, int16_t _subjNum) {
 	}
 }
 
-int MenusPack::QuitWarningMenu() {
+int MenusPack::QuitWarningMenu(const char* header){
 	while (44){
-		switch (Builder->MenuCreate(Sp->Warning_header(), "", 2, Sp->Yes(), Sp->No()))
+		switch (Builder->MenuCreate(header, "", 2, Sp->Yes(), Sp->No()))
 		{
 		case 0:return 1;
 		case 1:return 0;
@@ -373,3 +411,15 @@ int MenusPack::QuitWarningMenu() {
 		}
 	}
 }
+
+int MenusPack::Task44(){
+	int gender;
+	switch (Builder->MenuCreate(Sp->Gender(), "", 2, Sp->GenderFem(), Sp->GenderMan()))
+	{
+	case 0:gender = 0;
+	case 1:gender = 1;
+	default:break;
+	}
+	return 0;
+}
+

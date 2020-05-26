@@ -12,7 +12,6 @@ protected:
 	string _str;
 public:
 	phrases() {
-		//system("mode con cols=145 lines=25");
 		SetConsoleCP(1251);
 		SetConsoleOutputCP(1251);
 	}
@@ -38,6 +37,8 @@ public:
 	virtual const char* AddEntry() { NaN; }
 	virtual const char* EditEntry() { NaN; }
 	virtual const char* Task44() { NaN; }
+	virtual const char* SaveDB() { NaN; }
+	virtual const char* DBmenu_footer() { NaN; }
 
 	virtual const char* Passed() { NaN; }
 	virtual const char* NotPassed() { NaN; }
@@ -67,7 +68,7 @@ public:
 	virtual const char* Len() { NaN; }
 	virtual const char* NumRangeErr() { NaN; }
 	virtual const char* GBErr() { NaN; }
-	virtual const char* BegSetBurth() { NaN; }
+	virtual const char* BegSetBirth() { NaN; }
 
 	virtual const char* GenderMan() { NaN; }
 	virtual const char* GenderFem() { NaN; }
@@ -92,7 +93,8 @@ public:
 	virtual const char* CleanGrade() { NaN; }
 	virtual const char* Gr_footer() { NaN; }
 
-	virtual const char* Warning_header() { NaN; }
+	virtual const char* Warning_header1() { NaN; }
+	virtual const char* Warning_header2() { NaN; }
 	virtual const char* Yes() { NaN; }
 	virtual const char* No() { NaN; }
 };
@@ -108,7 +110,7 @@ public:
 	const char* Lang_eng() { return "Английский"; }
 	const char* Lang_rus() { return "Русский"; }
 	const char* DBname_ivite() { return "Введите название базы данных"; }
-	const char* GoMM() { return "Сохранить и выйти в главное меню"; }
+	const char* GoMM() { return "Выйти в главное меню"; }
 	const char* Ftry() { return "Попытка открыть файл..."; }
 	const char* Fope() { return "Файл открыт"; }
 	const char* Ferr() { return "Ошибка! Попробуйте снова"; }
@@ -123,6 +125,8 @@ public:
 	const char* AddEntry() { return "Добавить новую запись о студенте"; }
 	const char* EditEntry() { return "Редатировать запись о студенте"; }
 	const char* Task44() { return "Задание варианта - 44"; }
+	const char* SaveDB() { return "Сохранить базу данных"; }
+	const char* DBmenu_footer() { return "Сохранение может занять какое-то время*"; }
 
 	const char* Passed() { return "Зачёт"; }
 	const char* NotPassed() { return "Незачёт"; }
@@ -179,7 +183,7 @@ public:
 	const char* Len() { return "Допустимая длина слова"; }
 	const char* NumRangeErr() { return "Некорректное число"; }
 	const char* GBErr() { return "Студент с таким номером зачётной книжки уже существует"; }
-	const char* BegSetBurth() { return "Сначала укажите дату рождения"; }
+	const char* BegSetBirth() { return "Сначала укажите дату рождения"; }
 
 	const char* GenderMan() { return "Мужской"; }
 	const char* GenderFem() { return "Женский"; }
@@ -208,9 +212,10 @@ public:
 	const char* NextSubj() { return "Перейти к следующему предмету"; }
 	const char* PrevSubj() { return "Перейти к предыдущему предмету"; }
 	const char* CleanGrade() { return "Очистить предмет и оценку"; }
-	const char* Gr_footer() { return "Если не заполнить оба поля оценки, то они не сохраниться"; }
+	const char* Gr_footer() { return "Если не заполнить оба поля оценки, то они не сохранится"; }
 
-	const char* Warning_header() { return "Вы уверены, что хотите выйти?\nЗапись не сохранится"; }
+	const char* Warning_header1() { return "Вы уверены, что хотите выйти?\nЗапись не сохранится"; }
+	const char* Warning_header2() { return "Вы уверены, что хотите выйти?\nНесохранённые данные будут утеряны*"; }
 	const char* Yes() { return "Да, выйти"; }
 	const char* No() { return "Нет, остаться"; }
 };
@@ -227,7 +232,7 @@ public:
 	const char* Lang_eng() { return  "English"; }
 	const char* Lang_rus() { return  "Russian"; }
 	const char* DBname_ivite() { return "Enter database name"; }
-	const char* GoMM() { return "Save and go to main menu"; }
+	const char* GoMM() { return "Go to main menu"; }
 	const char* Ftry() { return "Trying to open file..."; }
 	const char* Fope() { return "File open"; }
 	const char* Ferr() { return "Error! Try again"; }
@@ -242,6 +247,8 @@ public:
 	const char* AddEntry() { return "Add new entry about student"; }
 	const char* EditEntry() { return "Edit entry about student"; }
 	const char* Task44() { return "Task of variant - 44"; }
+	const char* SaveDB() { return "Save database"; }
+	const char* DBmenu_footer() { return "Saving may take some time *"; }
 
 
 	const char* Passed() { return "Passed"; }
@@ -274,8 +281,8 @@ public:
 	const char* MidName() { return "Middle name (if there is)"; }
 	const char* Gender() { return "Gender"; }
 	const char* Gender(int16_t Gender) {
-		if (Gender == 0) return "Gender: female";
-		if (Gender == 1) return "Gender: male";
+		if (Gender == 0) return "Gender: Female";
+		if (Gender == 1) return "Gender: Male";
 		return "Gender: -";
 	}
 	const char* Birth() { return "Date of birth"; }
@@ -299,7 +306,7 @@ public:
 	const char* Len() { return "Allowed word length"; }
 	const char* NumRangeErr() { return "Invalid number"; }
 	const char* GBErr() { return "A student with this gradebook number already exists"; }
-	const char* BegSetBurth() { return "First enter date of birth"; }
+	const char* BegSetBirth() { return "First enter date of birth"; }
 
 	const char* GenderMan() { return "Male"; }
 	const char* GenderFem() { return "Female"; }
@@ -329,7 +336,8 @@ public:
 	const char* CleanGrade() { return "Clear item and grade"; }
 	const char* Gr_footer() { return "If you do not fill out both assessment fields, they will not be saved"; }
 
-	const char* Warning_header() { return "Are you sure you want to quit?\nThe entry will not be saved"; }
+	const char* Warning_header1() { return "Are you sure you want to quit?\nThe entry will not be saved"; }
+	const char* Warning_header2() { return "Are you sure you want to quit?\nUnsaved data will be lost*"; }
 	const char* Yes() { return "Yes, quit"; }
 	const char* No() { return "No, stay"; }
 };

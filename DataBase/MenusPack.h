@@ -4,7 +4,6 @@
 #include "menu.h"
 #include "StudentList.h"
 #include "Filework.h"
-#include "Student.h"
 
 class MenusPack
 {
@@ -18,6 +17,7 @@ public:
 		delete Sp;
 		delete Builder;
 	}
+	void DrawHelloScreen();
 	int MainMenu();
 	int LangMenu();
 	int DatabaseMenu();
@@ -29,5 +29,6 @@ public:
 	int ShowGr();
 	int EditGrades();
 	int GradeMenu(int16_t, int16_t);
-	int QuitWarningMenu();
+	int QuitWarningMenu(const char*);
+	int Task44();
 };

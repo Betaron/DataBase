@@ -7,11 +7,11 @@ int Filework::DB_open(phrases* Sp) {
 		while (!DB.is_open()) {
 			cout << " > ";
 			getline(cin, DB_name);
+			if (DB_name == "!Q") return 0;
 			if (DB_name.empty()) {
 				cout << Sp->EmptyErr() << endl;
 				continue;
 			}
-			if (DB_name == "!Q") return 0;
 			try
 			{
 				cout << Sp->Ftry() << endl;
@@ -35,6 +35,7 @@ int Filework::DB_open(phrases* Sp) {
 			if (CheckPIN != 0x0573) {
 				cout << Sp->FnDB() << endl;
 				DB.close();
+				continue;
 			}
 		}
 		size_t PointPos = DB_name.length();
@@ -43,6 +44,7 @@ int Filework::DB_open(phrases* Sp) {
 			if (DB_name[i] == '.') PointPos = i;
 			if (DB_name[i] == '\\') SlashPos = i;
 		}
+		DB_short_name.erase();
 		for (int32_t i = SlashPos + 1; i < PointPos; i++) {
 			DB_short_name += DB_name[i];
 		}
@@ -59,16 +61,14 @@ int Filework::DB_create(phrases* Sp) {
 		try
 		{
 			cout << Sp->Ftry() << endl;
-			DB.open(DB_name + ".sdb", ios::in | ios::binary);
+			DB.open(DB_name, ios::in | ios::binary);
 			cout << Sp->FceateErr() << endl;
 			DB.close();
 			continue;
 		}
 		catch (const ifstream::failure&)
 		{
-			DB.open(DB_name + ".sdb", ios::out | ios::binary);
-			DB.close();
-			DB.open(DB_name + ".sdb", ios::in | ios::out | ios::binary);
+			DB.open(DB_name, ios::in | ios::out | ios::binary | ios::trunc);
 			cout << Sp->Fope() << endl;
 		}
 	}
@@ -81,8 +81,26 @@ int Filework::DB_create(phrases* Sp) {
 	DB << (char)0x05 << (char)0x73;
 	for (int32_t i = SlashPos + 1; i < PointPos; i++) {
 		DB_short_name += DB_name[i];
-		DB << DB_name[i];
 	}
 	DB.exceptions(ifstream::goodbit);
+	DB.close();
 	return 1;
+}
+
+void Filework::ReOpenDB(){
+	if(!DB.is_open())
+		DB.open(DB_name, ios::in | ios::out | ios::binary | ios::trunc);
+	DB << (char)0x05 << (char)0x73;
+}
+
+void Filework::WriteStudent(Student student){
+	DB.write((char*)&student, sizeof(Student));
+}
+
+int Filework::ReadStudent(Student* student){
+	if (DB.peek() != EOF) {
+		DB.read((char*)student, sizeof(Student));
+		return 1;
+	}
+	else return 0;
 }

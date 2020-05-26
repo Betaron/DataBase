@@ -44,9 +44,6 @@
     <ClInclude Include="Student.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Date.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="StudentList.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -54,6 +51,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="GUIphrases.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Date.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 
+#include "Student.h"
 #include "GUIPhrases.h"
 #include "Menu.h"
 
@@ -20,4 +21,8 @@ public:
 
 	string GetDB_short_name() { return DB_short_name; }
 	void CloseDB() { DB.close(); }
+	void ReOpenDB();
+	void WriteStudent(Student);
+	int ReadStudent(Student*);
 };
+

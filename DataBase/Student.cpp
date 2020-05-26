@@ -113,11 +113,18 @@ void Student::SetGender(uint8_t source) { Gender = source; }
 int Student::SetBirth(phrases* Sp) { return SetDateField(&Birth, 1950, 2019, Sp->Birth()); }
 int Student::SetUniversityYear(phrases* Sp) { 
 	if (Birth.GetYear() == 0) {
-		Sp->BegSetBurth();
 		system("cls");
+		cout << Sp->BegSetBirth() << endl << endl;
+		system("pause");
 		return 2;
 	}
-	return SetIntField(UniversityYear, Birth.GetYear() + 14, 2019, Sp->UniYear(), Sp);
+	int16_t* Buf = new int16_t;
+	*Buf = UniversityYear;
+	int res;
+	res = SetIntField(Buf, Birth.GetYear() + 14, 2019, Sp->UniYear(), Sp);
+	UniversityYear = *Buf;
+	delete Buf;
+	return res;
 }
 int Student::SetName(phrases* Sp) { return SetWordField(Name, 20, Sp->Name(), Sp); }
 int Student::SetSurname(phrases* Sp) { return SetWordField(Surname, 20, Sp->Surname(), Sp); }
@@ -144,7 +151,7 @@ const char* Student::GetSurname(){ return Surname; }
 const char* Student::GetMiddleName(){ return MiddleName; }
 int16_t Student::GetGender(){ return Gender; }
 Date Student::GetBirth(){ return Birth; }
-int16_t Student::GetUniversityYear(){ return *UniversityYear; }
+int16_t Student::GetUniversityYear(){ return UniversityYear; }
 const char* Student::GetFaculty(){ return Faculty; }
 const char* Student::GetDepartment() { return Department; }
 const char* Student::GetGroup(){ return Group; }
@@ -157,7 +164,7 @@ int Student::GetDone() {
 	if (strcmp(Surname, "-")) Done++;
 	if (Gender != -1) Done++;
 	if (Birth != DEFAULT_DATE) Done++;
-	if (*UniversityYear != 0) Done++;
+	if (UniversityYear != 0) Done++;
 	if (strcmp(Faculty, "-")) Done++;
 	if (strcmp(Department, "-")) Done++;
 	if (strcmp(Group, "-")) Done++;

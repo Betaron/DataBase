@@ -29,7 +29,6 @@ public:
 	void SetMark(int8_t source) { Mark = source; }
 	void SetTitleDefault();
 	void SetMarkDefault();
-
 };
 
 class Education
@@ -46,7 +45,7 @@ private:
 	char MiddleName[21] = "";
 	int16_t Gender;
 	Date Birth;
-	int16_t* UniversityYear;
+	int16_t UniversityYear;
 	char Faculty[11] = "";
 	char Department[11] = "";
 	char Group[16] = "";
@@ -58,8 +57,7 @@ public:
 		*Surname = '-';
 		*MiddleName = '-';
 		Gender = -1;
-		UniversityYear = new int16_t;
-		*UniversityYear = 0;
+		UniversityYear = 0;
 		*Faculty = '-';
 		*Department = '-';
 		*Group = '-';

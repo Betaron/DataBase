@@ -23,6 +23,7 @@ private:
 	list* Item_Current;
 	uint8_t Is_Created;
 	Student* list_create();
+	void list_create(Student);
 public:
 	StudentList() {
 		Item_Head = new list;
@@ -34,6 +35,7 @@ public:
 		delete Item_Current;
 	}
 	Student* item_add();
+	void item_add(Student);
 	void item_delete();
 	void list_delete();
 	void moveCursor(uint8_t);
