@@ -8,6 +8,10 @@ int Filework::DB_open(phrases* Sp) {
 			cout << " > ";
 			getline(cin, DB_name);
 			if (DB_name == "!Q") return 0;
+			if (DB_name.find_first_not_of("/*?\"<>|")) {
+				cout << Sp->EnterErr() << endl;
+				continue;
+			}
 			if (DB_name.empty()) {
 				cout << Sp->EmptyErr() << endl;
 				continue;
@@ -58,6 +62,10 @@ int Filework::DB_create(phrases* Sp) {
 	while (!DB.is_open()) {
 		getline(cin, DB_name);
 		if (DB_name == "!Q") return 0;
+		if (DB_name.find_first_not_of("/*?\"<>|")) {
+			cout << Sp->EnterErr() << endl;
+			continue;
+		}
 		try
 		{
 			cout << Sp->Ftry() << endl;

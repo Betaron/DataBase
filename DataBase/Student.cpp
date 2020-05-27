@@ -31,7 +31,8 @@ int setter::SetWordField(char* field, size_t fieldLen, const char* header , phra
 				((int)BufStr[i] >= 97 && (int)BufStr[i] <= 122) ||
 				((int)BufStr[i] >= -64 && (int)BufStr[i] <= 0) ||
 				((int)BufStr[i] >= 48 && (int)BufStr[i] <= 57) ||
-				BufStr[i] == '¨' || BufStr[i] == '¸' || BufStr[i] == '-' || BufStr[i] == '.')) {
+				BufStr[i] == '¨' || BufStr[i] == '¸' || BufStr[i] == ' '||
+				BufStr[i] == '-' || BufStr[i] == '.')) {
 				cout << Sp->EnterErr();
 				break;
 			}

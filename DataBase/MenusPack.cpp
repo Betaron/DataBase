@@ -48,7 +48,7 @@ int MenusPack::MainMenu() {
 					if (!CryptDecrypt(CrKey, NULL, TRUE, 0, (BYTE*)&student, &DataLen)) return -1;
 					StudentsCreator.item_add(student);
 				}
-				StudentsCreator.Set_to_start();
+				StudentsCreator.Set_to_end();
 				if (Hash)
 					if (!(CryptDestroyHash(Hash))) {
 						cout << "HASH ERROR!" << endl;
@@ -125,7 +125,7 @@ int MenusPack::DatabaseMenu() {
 			if (!CryptDeriveKey(CrProv, CALG_RC4, Hash, CRYPT_EXPORTABLE, &CrKey))return -1;
 			Libr.ReOpenDB();
 			if (StudentsCreator.getListStatus()) {
-				StudentsCreator.Set_to_end();
+				StudentsCreator.Set_to_start();
 				do {
 					student = *CurrentStudent;
 					if (!CryptEncrypt(CrKey, NULL, TRUE, 0, (BYTE*)&student, &DataLen, DataLen)) return -1;
@@ -179,7 +179,8 @@ int MenusPack::StudentMenu(Student*) {
 	string str;
 	while (44) {
 		switch (Builder->MenuCreate(Sp->Student_header(Libr.GetDB_short_name(),
-			CurrentStudent->GetName(), CurrentStudent->GetSurname(), CurrentStudent->GetNumGB()),Sp->Student_footer(CurrentStudent->GetDone()),
+			CurrentStudent->GetName(), CurrentStudent->GetSurname(),
+			CurrentStudent->GetNumGB()),Sp->Student_footer(CurrentStudent->GetDone()),
 			13, Sp->Surname(), Sp->Name(), Sp->MidName(), Sp->Gender(), Sp->Birth(),
 			Sp->UniYear(), Sp->Faculty(), Sp->Department(), Sp->Group(), Sp->GrBookNum(),
 			Sp->GoEnterGr(),Sp->DEL_stud(), Sp->GoDBmenu()))
@@ -387,6 +388,7 @@ int MenusPack::EditGrades() {
 				}
 			}
 		}
+		if(*SessionNumber == 0) is_empty = 0;
 		if (is_empty) {
 			cout << Sp->PreSessErr() << endl;
 			continue;
@@ -517,6 +519,8 @@ int MenusPack::Task44() {
 	}
 	DrawSucsessful(&less_than_half, B);
 	system("pause");
+	more_than_half.list_delete();
+	less_than_half.list_delete();
 	return 0;
 }
 
