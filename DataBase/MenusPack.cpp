@@ -37,7 +37,12 @@ int MenusPack::MainMenu() {
 				HCRYPTHASH Hash;
 				DWORD PassLen;
 				DWORD DataLen;
-				CHAR pass[] = "superpuperpassword";
+				setter set;
+				char _pass[31];
+				cout << Sp->EnterPass() << endl;
+				set.SetWordField(_pass, 30, "", Sp);
+				CHAR pass[31] = "";
+				strcpy_s(pass, _pass);
 				PassLen = strlen(pass);
 				DataLen = sizeof(Student);
 				if (!CryptAcquireContext(&CrProv, NULL, NULL, PROV_RSA_FULL, 0))return -1;
@@ -117,7 +122,12 @@ int MenusPack::DatabaseMenu() {
 			HCRYPTHASH Hash;
 			DWORD PassLen;
 			DWORD DataLen;
-			CHAR pass[] = "superpuperpassword";
+			setter set;
+			char _pass[31];
+			cout << Sp->EnterPass() << endl;
+			set.SetWordField(_pass, 30, "", Sp);
+			CHAR pass[31] = "";
+			strcpy_s(pass, _pass);
 			PassLen = strlen(pass);
 			DataLen = sizeof(Student);
 			if (!CryptAcquireContext(&CrProv, NULL, NULL, PROV_RSA_FULL, 0))return -1;
@@ -503,7 +513,7 @@ int MenusPack::Task44() {
 	cout << Sp->Group1() << ":" << endl;
 	if (more_than_half.getListStatus()) {
 		more_than_half.Set_to_start();
-		cout << setw(145) << setfill(B) << B << endl;
+		cout << setw(166) << setfill(B) << B << endl;
 		do {
 			DrawStudent(&more_than_half, B);
 			more_than_half.moveCursor(1);
@@ -551,7 +561,7 @@ void MenusPack::DrawSucsessful(StudentList* LIST, char B){
 	cout << Sp->mostSuccessful() << ":" << endl;
 	if (Max != 1) {
 		LIST->Set_to_start();
-		cout << setw(145) << setfill(B) << B << endl;
+		cout << setw(166) << setfill(B) << B << endl;
 		do {
 			if (Max == LIST->GetItem()->stud->GetAverage())
 				DrawStudent(LIST, B);
@@ -562,7 +572,7 @@ void MenusPack::DrawSucsessful(StudentList* LIST, char B){
 	cout << Sp->leastSuccessful() << ":" << endl;
 	if (Min != 6) {
 		LIST->Set_to_start();
-		cout << setw(145) << setfill(B) << B << endl;
+		cout << setw(166) << setfill(B) << B << endl;
 		do {
 			if (Min == LIST->GetItem()->stud->GetAverage())
 				DrawStudent(LIST, B);

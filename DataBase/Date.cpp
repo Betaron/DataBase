@@ -57,8 +57,3 @@ int operator ==(const Date& date1, const Date& date2) {
 	if (date1.DD == date2.DD && date1.MM == date2.MM && date1.YYYY == date2.YYYY) return 1;
 	else return 0;
 }
-
-char* operator +(const char*, const Date&){
-	
-	return nullptr;
-}

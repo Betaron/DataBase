@@ -49,7 +49,7 @@ private:
 	char Faculty[11] = "";
 	char Department[11] = "";
 	char Group[16] = "";
-	char NumGB[11] = ""; //number of grade book
+	char NumGB[11] = "";
 	Education session[9];
 public:
 	Student() {
@@ -91,4 +91,3 @@ public:
 	int SumGood();
 	int SumWorst();
 };
-
