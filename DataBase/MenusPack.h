@@ -27,8 +27,10 @@ public:
 	int ShowDB();
 	int GradesMenu();
 	int ShowGr();
+	void DrawStudent(StudentList*, char);
 	int EditGrades();
 	int GradeMenu(int16_t, int16_t);
 	int QuitWarningMenu(const char*);
 	int Task44();
+	void DrawSucsessful(StudentList*, char);
 };

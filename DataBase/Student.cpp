@@ -1,7 +1,6 @@
 #include "Student.h"
 
 #define BufClean cin.clear(); cin.ignore(cin.rdbuf()->in_avail()); _flushall()
-#define Symbol BufStr[i]
 #define Digits "1234567890"
 
 int setter::SetWordField(char* field, size_t fieldLen, const char* header , phrases* Sp) {
@@ -28,11 +27,11 @@ int setter::SetWordField(char* field, size_t fieldLen, const char* header , phra
 			continue;
 		}
 		for (size_t i = 0; i < len; i++) {
-			if (!(((int)Symbol >= 65 && (int)Symbol <= 90) ||
-				((int)Symbol >= 97 && (int)Symbol <= 122) ||
-				((int)Symbol >= -64 && (int)Symbol <= 0) ||
-				((int)Symbol >= 48 && (int)Symbol <= 57) ||
-				Symbol == '¨' || Symbol == '¸' || Symbol == '-' || Symbol == '.')) {
+			if (!(((int)BufStr[i] >= 65 && (int)BufStr[i] <= 90) ||
+				((int)BufStr[i] >= 97 && (int)BufStr[i] <= 122) ||
+				((int)BufStr[i] >= -64 && (int)BufStr[i] <= 0) ||
+				((int)BufStr[i] >= 48 && (int)BufStr[i] <= 57) ||
+				BufStr[i] == '¨' || BufStr[i] == '¸' || BufStr[i] == '-' || BufStr[i] == '.')) {
 				cout << Sp->EnterErr();
 				break;
 			}
@@ -66,7 +65,7 @@ int setter::SetIntField(int16_t* field, int16_t fieldmin, int16_t fieldmax, cons
 		}
 		(BufStr[1] == '+' || BufStr[1] == '-') ? i = 1 : i = 0;
 		for (; i < len; i++) {
-			if (!(((int)Symbol >= 48 && (int)Symbol <= 57))) {
+			if (!(((int)BufStr[i] >= 48 && (int)BufStr[i] <= 57))) {
 				cout << Sp->EnterErr() << endl;
 				break;
 			}
@@ -158,6 +157,8 @@ const char* Student::GetGroup(){ return Group; }
 const char* Student::GetNumGB(){ return NumGB; }
 Education* Student::GetSession() { return session; }
 
+
+
 int Student::GetDone() {
 	int Done(0);
 	if (strcmp(Name, "-")) Done++;
@@ -183,4 +184,39 @@ void Subject::SetTitleDefault() {
 
 void Subject::SetMarkDefault() {
 	Mark = 0;
+}
+
+double Student::GetAverage(){
+	uint8_t counter = 0;
+	double sum = 0;
+	uint8_t cur;
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 10; j++) {
+			cur = session[i].subjects[j].GetMark();
+			if (cur > 1) {
+				counter++;
+				sum += cur;
+			}
+		}
+	}
+	if (counter == 0)return 0;
+	else return sum / counter;
+}
+
+int Student::GetGradeGroup(){
+	uint8_t counter_23 = 0;
+	uint8_t counter_45 = 0;
+	double sum = 0;
+	uint8_t cur;
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 10; j++) {
+			cur = session[i].subjects[j].GetMark();
+			if (cur == 2 || cur == 3)
+				counter_23++;
+			if (cur == 4 || cur == 5)
+				counter_45++;
+		}
+	}
+	if (counter_45 > counter_23) return 1;
+	else return 0;
 }

@@ -87,5 +87,7 @@ public:
 	const char* GetNumGB();
 	int GetDone();
 	Education* GetSession();
+	double GetAverage();
+	int GetGradeGroup();
 };
 

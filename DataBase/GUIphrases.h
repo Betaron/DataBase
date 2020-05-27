@@ -97,6 +97,11 @@ public:
 	virtual const char* Warning_header2() { NaN; }
 	virtual const char* Yes() { NaN; }
 	virtual const char* No() { NaN; }
+	virtual const char* EnterPass() { NaN; }
+	virtual const char* Group1() { NaN; }
+	virtual const char* Group2() { NaN; }
+	virtual const char* mostSuccessful() { NaN; }
+	virtual const char* leastSuccessful() { NaN; }
 };
 
 class rus : public phrases {
@@ -129,7 +134,7 @@ public:
 	const char* DBmenu_footer() { return "Сохранение может занять какое-то время*"; }
 
 	const char* Passed() { return "Зачёт"; }
-	const char* NotPassed() { return "Незачёт"; }
+	const char* NotPassed() { return "2 (Незачёт)"; }
 	const char* Satisf() { return "3 (Удовл.)"; }
 	const char* Good() { return "4 (Хор.)"; }
 	const char* Great() { return "5 (Отл.)"; }
@@ -218,6 +223,12 @@ public:
 	const char* Warning_header2() { return "Вы уверены, что хотите выйти?\nНесохранённые данные будут утеряны*"; }
 	const char* Yes() { return "Да, выйти"; }
 	const char* No() { return "Нет, остаться"; }
+	const char* EnterPass() { return "Введите пароль"; }
+
+	const char* Group1() { return "Студенты у которых хороших и отличных оценок более 50%"; }
+	const char* Group2() { return "Остальные студенты"; }
+	const char* mostSuccessful() { return "Наибольший успех"; }
+	const char* leastSuccessful() { return "Наименьший успех"; }
 };
 
 
@@ -252,7 +263,7 @@ public:
 
 
 	const char* Passed() { return "Passed"; }
-	const char* NotPassed() { return "NotPassed"; }
+	const char* NotPassed() { return "2 (NotPassed)"; }
 	const char* Satisf() { return "3 (Satisf.)"; }
 	const char* Good() { return "4 (Good)"; }
 	const char* Great() { return "5 (Great)"; }
@@ -340,4 +351,10 @@ public:
 	const char* Warning_header2() { return "Are you sure you want to quit?\nUnsaved data will be lost*"; }
 	const char* Yes() { return "Yes, quit"; }
 	const char* No() { return "No, stay"; }
+	const char* EnterPass() { return "Enter password"; }
+
+	const char* Group1() { return "Students with good and excellent marks more than 50%"; }
+	const char* Group2() { return "Other students"; }
+	const char* mostSuccessful() { return "Greatest success"; }
+	const char* leastSuccessful() { return "Least success"; }
 };

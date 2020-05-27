@@ -1,5 +1,5 @@
 #include "MenusPack.h"
-
+#include "Wincrypt.h"
 
 #define CurrentStudent StudentsCreator.GetItem()->stud
 
@@ -29,16 +29,46 @@ int MenusPack::MainMenu() {
 			}
 			break;
 		case 1:
+		{
 			if (Libr.DB_open(Sp)) {
 				Student student;
-				while (Libr.ReadStudent(&student)){
+				HCRYPTPROV CrProv;
+				HCRYPTKEY CrKey;
+				HCRYPTHASH Hash;
+				DWORD PassLen;
+				DWORD DataLen;
+				CHAR pass[] = "superpuperpassword";
+				PassLen = strlen(pass);
+				DataLen = sizeof(Student);
+				if (!CryptAcquireContext(&CrProv, NULL, NULL, PROV_RSA_FULL, 0))return -1;
+				if (!CryptCreateHash(CrProv, CALG_MD5, 0, 0, &Hash)) return -1;
+				if (!CryptHashData(Hash, (BYTE*)pass, PassLen, 0)) return -1;
+				if (!CryptDeriveKey(CrProv, CALG_RC4, Hash, CRYPT_EXPORTABLE, &CrKey))return -1;
+				while (Libr.ReadStudent(&student)) {
+					if (!CryptDecrypt(CrKey, NULL, TRUE, 0, (BYTE*)&student, &DataLen)) return -1;
 					StudentsCreator.item_add(student);
 				}
 				StudentsCreator.Set_to_start();
+				if (Hash)
+					if (!(CryptDestroyHash(Hash))) {
+						cout << "HASH ERROR!" << endl;
+						return -1;
+					}
+				if (CrKey)
+					if (!(CryptDestroyKey(CrKey))) {
+						cout << "KEY ERROR!" << endl;
+						return -1;
+					}
+				if (CrProv)
+					if (!(CryptReleaseContext(CrProv, 0))) {
+						cout << "PROVIDER ERROR!" << endl;
+						return -1;
+					}
 				Libr.CloseDB();
 				DatabaseMenu();
 			}
 			break;
+		}
 		case 2:
 			LangMenu();
 			break;
@@ -76,18 +106,51 @@ int MenusPack::DatabaseMenu() {
 			EnterGB_Screen();
 			break;
 		case 3:
+			Task44();
 			break;
 		case 4:
+		{
+			Student student;
+			HCRYPTPROV CrProv;
+			HCRYPTKEY CrKey;
+			HCRYPTHASH Hash;
+			DWORD PassLen;
+			DWORD DataLen;
+			CHAR pass[] = "superpuperpassword";
+			PassLen = strlen(pass);
+			DataLen = sizeof(Student);
+			if (!CryptAcquireContext(&CrProv, NULL, NULL, PROV_RSA_FULL, 0))return -1;
+			if (!CryptCreateHash(CrProv, CALG_MD5, 0, 0, &Hash)) return -1;
+			if (!CryptHashData(Hash, (BYTE*)pass, PassLen, 0)) return -1;
+			if (!CryptDeriveKey(CrProv, CALG_RC4, Hash, CRYPT_EXPORTABLE, &CrKey))return -1;
 			Libr.ReOpenDB();
 			if (StudentsCreator.getListStatus()) {
-				StudentsCreator.Set_to_start();
+				StudentsCreator.Set_to_end();
 				do {
-					Libr.WriteStudent(*CurrentStudent);
+					student = *CurrentStudent;
+					if (!CryptEncrypt(CrKey, NULL, TRUE, 0, (BYTE*)&student, &DataLen, DataLen)) return -1;
+					Libr.WriteStudent(student);
 					StudentsCreator.moveCursor(1);
 				} while (StudentsCreator.GetItem() != StudentsCreator.GetHead()->next_item);
+				if (Hash)
+					if (!(CryptDestroyHash(Hash))) {
+						cout << "HASH ERROR!" << endl;
+						return -1;
+					}
+				if (CrKey)
+					if (!(CryptDestroyKey(CrKey))) {
+						cout << "KEY ERROR!" << endl;
+						return -1;
+					}
+				if (CrProv)
+					if (!(CryptReleaseContext(CrProv, 0))) {
+						cout << "PROVIDER ERROR!" << endl;
+						return -1;
+					}
 				Libr.CloseDB();
 			}
 			break;
+		}
 		case 5:
 			if (QuitWarningMenu(Sp->Warning_header2())) {
 				StudentsCreator.list_delete();
@@ -213,41 +276,32 @@ int MenusPack::ShowDB() {
 	system("cls");
 	string gender;
 	char B = (char)-107;
-	int Number = 1;
 	StudentsCreator.Set_to_start();
 	cout << setw(145) << setfill(B) << B << endl;
-	//cout << B << setw(20) << left << "#" <<
-	//	B << setw(20) << left << Sp->Surname() <<
-	//	B << setw(20) << left << Sp->Name() <<
-	//	B << setw(20) << left << Sp->MidName() <<
-	//	B << setw(10) << left << Sp->GrBookNum() <<
-	//	B << setw(15) << left << Sp->Group() <<
-	//	B << setw(10) << left << Sp->Gender() <<
-	//	B << setw(15) << left << Sp->Birth() <<
-	//	B << setw(20) << left << Sp->UniYear() <<
-	//	B << setw(10) << left << Sp->Faculty() <<
-	//	B << setw(10) << left << Sp->Department() << B << endl;
-
 	do {
-		if (CurrentStudent->GetGender() == 0) gender = Sp->GenderFem();
-		else gender = Sp->GenderMan();
-		cout << setfill(' ') << '|' << setw(4) << left << Number <<
-			'|' << setw(20) << left << CurrentStudent->GetSurname() <<
-			'|' << setw(20) << left << CurrentStudent->GetName() <<
-			'|' << setw(20) << left << CurrentStudent->GetMiddleName() <<
-			'|' << setw(10) << left << CurrentStudent->GetNumGB() <<
-			'|' << setw(15) << left << CurrentStudent->GetGroup() <<
-			'|' << setw(10) << left << gender <<
-			'|' << setw(10) << left << CurrentStudent->GetBirth() <<
-			'|' << setw(4) << left << CurrentStudent->GetUniversityYear() <<
-			'|' << setw(10) << left << CurrentStudent->GetFaculty() <<
-			'|' << setw(10) << left << CurrentStudent->GetDepartment() << '|' << endl;
-		cout << setw(145) << setfill(B) << B << endl;
+		DrawStudent(&StudentsCreator, B);
 		StudentsCreator.moveCursor(1);
-		Number++;
 	} while (StudentsCreator.GetItem() != StudentsCreator.GetHead()->next_item);
 	system("pause");
 	return 0;
+}
+
+void MenusPack::DrawStudent(StudentList* LIST, char B) {
+	string gender;
+	if (LIST->GetItem()->stud->GetGender() == 0) gender = Sp->GenderFem();
+	else gender = Sp->GenderMan();
+	cout <<'|' << setfill(' ') << setw(20) << left << LIST->GetItem()->stud->GetSurname() <<
+		'|' << setw(20) << left << LIST->GetItem()->stud->GetName() <<
+		'|' << setw(20) << left << LIST->GetItem()->stud->GetMiddleName() <<
+		'|' << setw(10) << left << LIST->GetItem()->stud->GetNumGB() <<
+		'|' << setw(15) << left << LIST->GetItem()->stud->GetGroup() <<
+		'|' << setw(10) << left << gender <<
+		'|' << setw(10) << left << LIST->GetItem()->stud->GetBirth() <<
+		'|' << setw(4) << left << LIST->GetItem()->stud->GetUniversityYear() <<
+		'|' << setw(10) << left << LIST->GetItem()->stud->GetFaculty() <<
+		'|' << setw(10) << left << LIST->GetItem()->stud->GetDepartment() <<
+		'|' << setw(4) << left << round(LIST->GetItem()->stud->GetAverage() * 100) / 100 << '|' << endl;
+	cout << setw(145) << setfill(B) << B << endl;
 }
 
 int MenusPack::GradesMenu() {
@@ -327,13 +381,13 @@ int MenusPack::EditGrades() {
 		is_empty = 1;
 		if (*SessionNumber > 0) {
 			for (int j = 0; j < 10; j++) {
-				if (CurrentStudent->GetSession()[*SessionNumber - 1].subjects[j].GetTitle() != "-") {
+				if (CurrentStudent->GetSession()[*SessionNumber - 1].subjects[j].GetMark() != 0) {
 					is_empty = 0;
 					break;
 				}
 			}
 		}
-		if (!is_empty) {
+		if (is_empty) {
 			cout << Sp->PreSessErr() << endl;
 			continue;
 		}
@@ -412,14 +466,96 @@ int MenusPack::QuitWarningMenu(const char* header){
 	}
 }
 
-int MenusPack::Task44(){
-	int gender;
+int MenusPack::Task44() {
+	int gender = -1;
 	switch (Builder->MenuCreate(Sp->Gender(), "", 2, Sp->GenderFem(), Sp->GenderMan()))
 	{
 	case 0:gender = 0;
 	case 1:gender = 1;
 	default:break;
 	}
+	system("cls");
+	StudentList more_than_half;
+	StudentList less_than_half;
+
+	if (StudentsCreator.getListStatus()) {
+		StudentsCreator.Set_to_start();
+		do {
+			if (CurrentStudent->GetGender() == gender) {
+				if (CurrentStudent->GetAverage() != 0) {
+					if (CurrentStudent->GetGradeGroup())
+						more_than_half.item_add(*StudentsCreator.GetItem()->stud);
+					else less_than_half.item_add(*StudentsCreator.GetItem()->stud);
+				}
+			}
+			StudentsCreator.moveCursor(1);
+		} while (StudentsCreator.GetItem() != StudentsCreator.GetHead()->next_item);
+	}
+
+	char B = (char)-107;
+	cout << Sp->Group1() << ":" << endl;
+	if (more_than_half.getListStatus()) {
+		more_than_half.Set_to_start();
+		cout << setw(145) << setfill(B) << B << endl;
+		do {
+			DrawStudent(&more_than_half, B);
+			more_than_half.moveCursor(1);
+		} while (more_than_half.GetItem() != more_than_half.GetHead()->next_item);
+	}
+
+	DrawSucsessful(&more_than_half, B);
+	cout << "\n############################\n\n";
+
+	cout << Sp->Group2() << ":" << endl;
+	if (less_than_half.getListStatus()) {
+		less_than_half.Set_to_start();
+		cout << setw(145) << setfill(B) << B << endl;
+		do {
+			DrawStudent(&less_than_half, B);
+			less_than_half.moveCursor(1);
+		} while (less_than_half.GetItem() != less_than_half.GetHead()->next_item);
+	}
+	DrawSucsessful(&less_than_half, B);
+	system("pause");
 	return 0;
 }
 
+void MenusPack::DrawSucsessful(StudentList* LIST, char B){
+	double Max = 1;
+	double Min = 6;
+	double LocalAver = 0;
+
+	if (LIST->getListStatus()) {
+		LIST->Set_to_start();
+		do {
+			LocalAver = LIST->GetItem()->stud->GetAverage();
+			if (LocalAver > 1) {
+				if (LocalAver > Max)Max = LocalAver;
+				if (LocalAver < Min)Min = LocalAver;
+			}
+			LIST->moveCursor(1);
+		} while (LIST->GetItem() != LIST->GetHead()->next_item);
+	}
+
+	cout << Sp->mostSuccessful() << ":" << endl;
+	if (Max != 1) {
+		LIST->Set_to_start();
+		cout << setw(145) << setfill(B) << B << endl;
+		do {
+			if (Max == LIST->GetItem()->stud->GetAverage())
+				DrawStudent(LIST, B);
+			LIST->moveCursor(1);
+		} while (LIST->GetItem() != LIST->GetHead()->next_item);
+	}
+
+	cout << Sp->leastSuccessful() << ":" << endl;
+	if (Min != 6) {
+		LIST->Set_to_start();
+		cout << setw(145) << setfill(B) << B << endl;
+		do {
+			if (Min == LIST->GetItem()->stud->GetAverage())
+				DrawStudent(LIST, B);
+			LIST->moveCursor(1);
+		} while (LIST->GetItem() != LIST->GetHead()->next_item);
+	}
+}
