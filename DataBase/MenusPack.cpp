@@ -100,7 +100,8 @@ int MenusPack::DatabaseMenu() {
 			ShowDB();
 			break;
 		case 1:
-			StudentMenu(StudentsCreator.item_add());
+			StudentsCreator.item_add();
+			StudentMenu();
 			break;
 		case 2:
 			EnterGB_Screen();
@@ -174,8 +175,7 @@ int MenusPack::GenderMenu() {
 	}
 }
 
-int MenusPack::StudentMenu(Student*) {
-	Date DefaultDate;
+int MenusPack::StudentMenu() {
 	string str;
 	while (44) {
 		switch (Builder->MenuCreate(Sp->Student_header(Libr.GetDB_short_name(),
@@ -262,9 +262,12 @@ int MenusPack::EnterGB_Screen() {
 			cout << Sp->NaNGBN() << endl;
 			continue;
 		}
-		else break;
+		else {
+			StudentsCreator.GotoGB(str);
+			break;
+		}
 	}
-	StudentMenu(noname->stud);
+	StudentMenu();
 	return 1;
 }
 
@@ -278,7 +281,7 @@ int MenusPack::ShowDB() {
 	string gender;
 	char B = (char)-107;
 	StudentsCreator.Set_to_start();
-	cout << setw(145) << setfill(B) << B << endl;
+	cout << setw(166) << setfill(B) << B << endl;
 	do {
 		DrawStudent(&StudentsCreator, B);
 		StudentsCreator.moveCursor(1);
@@ -291,7 +294,7 @@ void MenusPack::DrawStudent(StudentList* LIST, char B) {
 	string gender;
 	if (LIST->GetItem()->stud->GetGender() == 0) gender = Sp->GenderFem();
 	else gender = Sp->GenderMan();
-	cout <<'|' << setfill(' ') << setw(20) << left << LIST->GetItem()->stud->GetSurname() <<
+	cout << '|' << setfill(' ') << setw(20) << left << LIST->GetItem()->stud->GetSurname() <<
 		'|' << setw(20) << left << LIST->GetItem()->stud->GetName() <<
 		'|' << setw(20) << left << LIST->GetItem()->stud->GetMiddleName() <<
 		'|' << setw(10) << left << LIST->GetItem()->stud->GetNumGB() <<
@@ -301,8 +304,10 @@ void MenusPack::DrawStudent(StudentList* LIST, char B) {
 		'|' << setw(4) << left << LIST->GetItem()->stud->GetUniversityYear() <<
 		'|' << setw(10) << left << LIST->GetItem()->stud->GetFaculty() <<
 		'|' << setw(10) << left << LIST->GetItem()->stud->GetDepartment() <<
-		'|' << setw(4) << left << round(LIST->GetItem()->stud->GetAverage() * 100) / 100 << '|' << endl;
-	cout << setw(145) << setfill(B) << B << endl;
+		'|' << setw(4) << left << round(LIST->GetItem()->stud->GetAverage() * 100) / 100 <<
+		'|' << "[4/5]:" << setw(2) << left << LIST->GetItem()->stud->SumGood() <<
+		"    [2/3]:" << setw(2) << left << LIST->GetItem()->stud->SumWorst() << "|" << endl;
+	cout << setw(166) << setfill(B) << B << endl;
 }
 
 int MenusPack::GradesMenu() {
@@ -472,8 +477,8 @@ int MenusPack::Task44() {
 	int gender = -1;
 	switch (Builder->MenuCreate(Sp->Gender(), "", 2, Sp->GenderFem(), Sp->GenderMan()))
 	{
-	case 0:gender = 0;
-	case 1:gender = 1;
+	case 0:gender = 0; break;
+	case 1:gender = 1; break;
 	default:break;
 	}
 	system("cls");
@@ -485,7 +490,7 @@ int MenusPack::Task44() {
 		do {
 			if (CurrentStudent->GetGender() == gender) {
 				if (CurrentStudent->GetAverage() != 0) {
-					if (CurrentStudent->GetGradeGroup())
+					if (CurrentStudent->SumGood() > CurrentStudent->SumWorst())
 						more_than_half.item_add(*StudentsCreator.GetItem()->stud);
 					else less_than_half.item_add(*StudentsCreator.GetItem()->stud);
 				}
@@ -511,7 +516,7 @@ int MenusPack::Task44() {
 	cout << Sp->Group2() << ":" << endl;
 	if (less_than_half.getListStatus()) {
 		less_than_half.Set_to_start();
-		cout << setw(145) << setfill(B) << B << endl;
+		cout << setw(166) << setfill(B) << B << endl;
 		do {
 			DrawStudent(&less_than_half, B);
 			less_than_half.moveCursor(1);
@@ -519,8 +524,10 @@ int MenusPack::Task44() {
 	}
 	DrawSucsessful(&less_than_half, B);
 	system("pause");
-	more_than_half.list_delete();
-	less_than_half.list_delete();
+	if (more_than_half.getListStatus())
+		more_than_half.list_delete();
+	if (less_than_half.getListStatus())
+		less_than_half.list_delete();
 	return 0;
 }
 

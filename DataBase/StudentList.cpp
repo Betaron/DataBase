@@ -102,3 +102,14 @@ list* StudentList::FindGB(string source) {
 	} while (Item_Current != start);
 	return nullptr;
 }
+
+int StudentList::GotoGB(string source) {
+	list* start = Item_Current;
+	do {
+		if (Item_Current->stud->GetNumGB() == source) {
+			return 1;
+		}
+		moveCursor(1);
+	} while (Item_Current != start);
+	return 0;
+}

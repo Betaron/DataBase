@@ -88,6 +88,7 @@ public:
 	int GetDone();
 	Education* GetSession();
 	double GetAverage();
-	int GetGradeGroup();
+	int SumGood();
+	int SumWorst();
 };
 

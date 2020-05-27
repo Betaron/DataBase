@@ -204,20 +204,29 @@ double Student::GetAverage(){
 	else return sum / counter;
 }
 
-int Student::GetGradeGroup(){
-	uint8_t counter_23 = 0;
+int Student::SumGood(){
 	uint8_t counter_45 = 0;
-	double sum = 0;
+	uint8_t cur;
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 10; j++) {
+			cur = session[i].subjects[j].GetMark();
+			if (cur == 4 || cur == 5)
+				counter_45++;
+		}
+	}
+	return counter_45;
+}
+
+int Student::SumWorst(){
+	uint8_t counter_23 = 0;
 	uint8_t cur;
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 10; j++) {
 			cur = session[i].subjects[j].GetMark();
 			if (cur == 2 || cur == 3)
 				counter_23++;
-			if (cur == 4 || cur == 5)
-				counter_45++;
 		}
 	}
-	if (counter_45 > counter_23) return 1;
-	else return 0;
+	return counter_23;
 }
+

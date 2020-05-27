@@ -21,7 +21,7 @@ public:
 	int MainMenu();
 	int LangMenu();
 	int DatabaseMenu();
-	int StudentMenu(Student*);
+	int StudentMenu();
 	int GenderMenu();
 	int EnterGB_Screen();
 	int ShowDB();

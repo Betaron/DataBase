@@ -42,6 +42,7 @@ public:
 	uint8_t getListStatus();
 
 	list* FindGB(string);
+	int GotoGB(string);
 
 	list* GetHead() { return Item_Head; }
 	list* GetItem() { return Item_Current; }
