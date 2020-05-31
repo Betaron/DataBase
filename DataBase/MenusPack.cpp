@@ -53,7 +53,8 @@ int MenusPack::MainMenu() {
 					if (!CryptDecrypt(CrKey, NULL, TRUE, 0, (BYTE*)&student, &DataLen)) return -1;
 					StudentsCreator.item_add(student);
 				}
-				StudentsCreator.Set_to_end();
+				if(StudentsCreator.getListStatus())
+					StudentsCreator.Set_to_end();
 				if (Hash)
 					if (!(CryptDestroyHash(Hash))) {
 						cout << "HASH ERROR!" << endl;
@@ -116,27 +117,33 @@ int MenusPack::DatabaseMenu() {
 			break;
 		case 4:
 		{
-			Student student;
-			HCRYPTPROV CrProv;
-			HCRYPTKEY CrKey;
-			HCRYPTHASH Hash;
-			DWORD PassLen;
-			DWORD DataLen;
-			setter set;
-			char _pass[31];
-			cout << Sp->EnterPass() << endl;
-			set.SetWordField(_pass, 30, "", Sp);
-			CHAR pass[31] = "";
-			strcpy_s(pass, _pass);
-			PassLen = strlen(pass);
-			DataLen = sizeof(Student);
-			if (!CryptAcquireContext(&CrProv, NULL, NULL, PROV_RSA_FULL, 0))return -1;
-			if (!CryptCreateHash(CrProv, CALG_MD5, 0, 0, &Hash)) return -1;
-			if (!CryptHashData(Hash, (BYTE*)pass, PassLen, 0)) return -1;
-			if (!CryptDeriveKey(CrProv, CALG_RC4, Hash, CRYPT_EXPORTABLE, &CrKey))return -1;
-			Libr.ReOpenDB();
 			if (StudentsCreator.getListStatus()) {
 				StudentsCreator.Set_to_start();
+				if (CurrentStudent->GetKEY() != 0x2C) {
+					system("cls");
+					cout << Sp->SaveErr() << endl << endl;
+					system("pause");
+					break;
+				}
+				Student student;
+				HCRYPTPROV CrProv;
+				HCRYPTKEY CrKey;
+				HCRYPTHASH Hash;
+				DWORD PassLen;
+				DWORD DataLen;
+				setter set;
+				char _pass[31];
+				cout << Sp->EnterPass() << endl;
+				set.SetWordField(_pass, 30, "", Sp);
+				CHAR pass[31] = "";
+				strcpy_s(pass, _pass);
+				PassLen = strlen(pass);
+				DataLen = sizeof(Student);
+				if (!CryptAcquireContext(&CrProv, NULL, NULL, PROV_RSA_FULL, 0))return -1;
+				if (!CryptCreateHash(CrProv, CALG_MD5, 0, 0, &Hash)) return -1;
+				if (!CryptHashData(Hash, (BYTE*)pass, PassLen, 0)) return -1;
+				if (!CryptDeriveKey(CrProv, CALG_RC4, Hash, CRYPT_EXPORTABLE, &CrKey))return -1;
+				Libr.ReOpenDB();
 				do {
 					student = *CurrentStudent;
 					if (!CryptEncrypt(CrKey, NULL, TRUE, 0, (BYTE*)&student, &DataLen, DataLen)) return -1;
@@ -164,7 +171,8 @@ int MenusPack::DatabaseMenu() {
 		}
 		case 5:
 			if (QuitWarningMenu(Sp->Warning_header2())) {
-				StudentsCreator.list_delete();
+				if (StudentsCreator.getListStatus())
+					StudentsCreator.list_delete();
 				return 0;
 			}
 			break;

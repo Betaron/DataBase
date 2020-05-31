@@ -102,6 +102,7 @@ public:
 	virtual const char* Group2() { NaN; }
 	virtual const char* mostSuccessful() { NaN; }
 	virtual const char* leastSuccessful() { NaN; }
+	virtual const char* SaveErr() { NaN; }
 };
 
 class rus : public phrases {
@@ -217,7 +218,7 @@ public:
 	const char* NextSubj() { return "Перейти к следующему предмету"; }
 	const char* PrevSubj() { return "Перейти к предыдущему предмету"; }
 	const char* CleanGrade() { return "Очистить предмет и оценку"; }
-	const char* Gr_footer() { return "Если не заполнить оба поля оценки, то они не сохранится"; }
+	const char* Gr_footer() { return "Если не заполнить оба поля оценки, то они не сохранятся"; }
 
 	const char* Warning_header1() { return "Вы уверены, что хотите выйти?\nЗапись не сохранится"; }
 	const char* Warning_header2() { return "Вы уверены, что хотите выйти?\nНесохранённые данные будут утеряны*"; }
@@ -229,6 +230,7 @@ public:
 	const char* Group2() { return "Остальные студенты"; }
 	const char* mostSuccessful() { return "Наибольший успех"; }
 	const char* leastSuccessful() { return "Наименьший успех"; }
+	const char* SaveErr() { return "Ошибка сохранения! Данные не перезаписаны..."; }
 };
 
 
@@ -357,4 +359,5 @@ public:
 	const char* Group2() { return "Other students"; }
 	const char* mostSuccessful() { return "Greatest success"; }
 	const char* leastSuccessful() { return "Least success"; }
+	const char* SaveErr() { return "Save error! Data not overwritten ..."; }
 };

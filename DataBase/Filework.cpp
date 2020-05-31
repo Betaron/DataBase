@@ -8,7 +8,7 @@ int Filework::DB_open(phrases* Sp) {
 			cout << " > ";
 			getline(cin, DB_name);
 			if (DB_name == "!Q") return 0;
-			if (DB_name.find_first_not_of("/*?\"<>|")) {
+			if (DB_name.find_first_not_of("/?*\"<>|")) {
 				cout << Sp->EnterErr() << endl;
 				continue;
 			}

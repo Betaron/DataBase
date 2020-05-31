@@ -40,6 +40,7 @@ public:
 class Student : setter
 {
 private:
+	uint8_t KEY = 0x2C;
 	char Name[21] = "";
 	char Surname[21] = "";
 	char MiddleName[21] = "";
@@ -75,6 +76,7 @@ public:
 	string SetNumGB(phrases*);
 	void SetNumGB(int, string, phrases*);
 
+	const uint8_t GetKEY();
 	const char* GetName();
 	const char* GetSurname();
 	const char* GetMiddleName();

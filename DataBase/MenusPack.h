@@ -8,7 +8,7 @@
 class MenusPack
 {
 private:
-	phrases* Sp = new eng; // Sp - speaker
+	phrases* Sp = new eng;
 	Menu* Builder = new Menu;
 	Filework Libr;
 	StudentList StudentsCreator; 

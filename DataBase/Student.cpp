@@ -132,7 +132,6 @@ int Student::SetMiddleName(phrases* Sp) { return SetWordField(MiddleName, 20, Sp
 int Student::SetFaculty(phrases* Sp) { return SetWordField(Faculty, 10, Sp->Faculty(), Sp); }
 int Student::SetDepartment(phrases* Sp) { return SetWordField(Department, 10, Sp->Department(), Sp); }
 int Student::SetGroup(phrases* Sp) { return SetWordField(Group, 15, Sp->Group(), Sp); }
-
 string Student::SetNumGB(phrases* Sp) {
 	char source[11] = "";
 	string res;
@@ -140,12 +139,12 @@ string Student::SetNumGB(phrases* Sp) {
 	 else res = source;
 	return res;
 }
-
 void Student::SetNumGB(int flag, string str, phrases* Sp) {
 	if (flag == 0) strcpy_s(NumGB, 10, str.c_str());
 	if (flag == 1) cout << Sp->GBErr();
 }
 
+const uint8_t Student::GetKEY(){ return KEY;}
 const char* Student::GetName(){ return Name; }
 const char* Student::GetSurname(){ return Surname; }
 const char* Student::GetMiddleName(){ return MiddleName; }
@@ -157,8 +156,6 @@ const char* Student::GetDepartment() { return Department; }
 const char* Student::GetGroup(){ return Group; }
 const char* Student::GetNumGB(){ return NumGB; }
 Education* Student::GetSession() { return session; }
-
-
 
 int Student::GetDone() {
 	int Done(0);
