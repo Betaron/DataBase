@@ -395,33 +395,17 @@ int MenusPack::EditGrades() {
 	system("cls");
 	int16_t* SessionNumber = new int16_t;
 	int16_t* SubjectNumber = new int16_t;
-	uint8_t is_empty;
 	*SessionNumber = 0;
 	*SubjectNumber = 0;
 	cout << Sp->SessNum_screen() << endl;
 	while (44) {
 		if (CurrentStudent->GetSession()->subjects->SetIntField(SessionNumber, 1, 9, "", Sp) == 2) return 0;
-		*SessionNumber = *SessionNumber - 1;
-		is_empty = 1;
-		if (*SessionNumber > 0) {
-			for (int j = 0; j < 10; j++) {
-				if (CurrentStudent->GetSession()[*SessionNumber - 1].subjects[j].GetMark() != 0) {
-					is_empty = 0;
-					break;
-				}
-			}
-		}
-		if(*SessionNumber == 0) is_empty = 0;
-		if (is_empty) {
-			cout << Sp->PreSessErr() << endl;
-			continue;
-		}
 		else break;
 	}
 	system("cls");
 	cout << Sp->SubjNum_screen(*SessionNumber + 1) << endl;
 	if (CurrentStudent->GetSession()->subjects->SetIntField(SubjectNumber, 1, 10, "", Sp) == 2) return 0;
-	GradeMenu(*SessionNumber, *SubjectNumber - 1);
+	GradeMenu(*SessionNumber - 1, *SubjectNumber - 1);
 	delete SubjectNumber;
 	delete SessionNumber;
 	return 0;
